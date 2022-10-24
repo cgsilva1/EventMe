@@ -9,6 +9,7 @@ public class ExploreViewModel extends ViewModel {
     private final MutableLiveData<String> mText;
 
     public ExploreViewModel() {
+
         mText = new MutableLiveData<>();
         mText.setValue("This is explore fragment");
     }
