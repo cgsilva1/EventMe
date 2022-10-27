@@ -7,6 +7,8 @@ public class Event {
     private String date;
     private Location location;
     private Time time;
+    private double price;
+    private String sponsor;
 
     public Event(String category, String date, Location location, Time time) {
         this.category = category;
@@ -29,5 +31,13 @@ public class Event {
 
     public Time getTime() {
         return time;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getSponsor() {
+        return sponsor;
     }
 }
