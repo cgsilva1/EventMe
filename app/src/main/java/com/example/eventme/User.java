@@ -4,18 +4,18 @@ import java.util.List;
 
 public class User {
     private String name;
-    private String birthday;
     private String email;
+    private String birthday;
     private String passwordHash;
-    private List<Event> reservations;
-    private Location location;
+    //private List<Event> reservations;
 
-    public User(String name, String birthday, String email, String passwordHash, Location location) {
+    public User(String name, String email, String birthday, String passwordHash) {
         this.name = name;
-        this.birthday = birthday;
         this.email = email;
+        this.birthday = birthday;
         this.passwordHash = passwordHash;
-        this.location = location;
+       // this.reservations = reservations;
+//        this.location = location;
     }
 
     public String getName() {
@@ -55,26 +55,25 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    //not in design doc
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-    public List<Event> getReservations() {
-        return reservations;
-    }
-
-
-    public void makeReservation(Event event){
-        reservations.add(event);
-    }
-
-    public void removeReservation(Event event){
-        reservations.remove(event);
-    }
+//    public Location getLocation() {
+//        return location;
+//    }
+//
+//    //not in design doc
+//    public void setLocation(Location location) {
+//        this.location = location;
+//    }
+//
+//    public List<Event> getReservations() {
+//        return reservations;
+//    }
+//
+//    public void makeReservation(Event event){
+//        reservations.add(event);
+//    }
+//
+//    public void removeReservation(Event event){
+//        reservations.remove(event);
+//    }
 
 }

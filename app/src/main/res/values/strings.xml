@@ -3,4 +3,27 @@
     <string name="title_explore">Explore</string>
     <string name="title_map">Map</string>
     <string name="title_profile">Profile</string>
+
+    //LOGIN
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome! "</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    //REGISTER
+    <string name="title_activity_reg">RegisterActivity</string>
+    <string name="prompt_name_reg">Name</string>
+    <string name="prompt_email_reg">Email</string>
+    <string name="prompt_dob_reg">Birthdate</string>
+    <string name="prompt_password_reg">Password</string>
+    <string name="prompt_confirm_password_reg">Confirm Password</string>
+    <string name="action_register">Register</string>
+    <string name="action_sign_in_short_reg">Register</string>
+    <string name="register_failed">"Register failed"</string>
+
 </resources>
