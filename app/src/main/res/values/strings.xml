@@ -4,6 +4,11 @@
     <string name="title_map">Map</string>
     <string name="title_profile">Profile</string>
 
+    //PROFILE
+    <string name="signin_prompt">Already have an account?</string>
+    <string name="create_prompt">Are you a new user?</string>
+    <string name="logo">logo</string>
+
     //LOGIN
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>

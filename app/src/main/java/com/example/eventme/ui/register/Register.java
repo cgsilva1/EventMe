@@ -1,52 +1,54 @@
 package com.example.eventme.ui.register;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.eventme.MainActivity;
 import com.example.eventme.R;
 import com.example.eventme.User;
-import com.example.eventme.databinding.ActivityRegisterBinding;
 import com.example.eventme.ui.explore.ExploreAdapter;
+import com.example.eventme.ui.login.LoginActivity;
+import com.example.eventme.ui.login.LoginViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
-public class Register<FirebaseAuth> extends AppCompatActivity {
+import java.util.HashMap;
+import java.util.Map;
 
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
-    private FirebaseAuth mAuth;
+public class Register extends AppCompatActivity {
+
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
     FirebaseUser currentUser;
-    private User user;
 
     //ProgressBar progressBar;
     EditText nameR, emailR, dobR, passwordR, confirmPasswordR;
-    Button submitRegister;
+    FirebaseAuth mAuth;
+    FirebaseFirestore fStore;
+
+    User user;
+    //Button submitRegister;
     TextView txtalreadyamember;
     Snackbar snackbar;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
@@ -56,23 +58,28 @@ public class Register<FirebaseAuth> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mAuth = FirebaseAuth.getInstance();
-
         //progressBar = findViewById(R.id.progressBar);
         nameR = findViewById(R.id.nameReg);
         emailR = findViewById(R.id.emailReg);
         dobR = findViewById(R.id.dobReg);
         passwordR = findViewById(R.id.passwordReg);
         confirmPasswordR = findViewById(R.id.confirmPasswordReg);
+
+        Button submitRegister = (Button) findViewById(R.id.registerBtn);
         //txtalreadyamember = findViewById(R.id.txtAlreadyAMember);
 
+        mAuth = FirebaseAuth.getInstance();
+        fStore = FirebaseFirestore.getInstance();
+
+        //check if the user is logged in --> never logged out
+        if(mAuth.getCurrentUser() != null)
+        {
+            startActivity(new Intent(Register.this, ExploreAdapter.class));
+            finish();
+        }
 
         //REGISTER BUTTON ONCLICK
-        submitRegister = findViewById(R.id.register);
-        submitRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                submitRegister();
+        submitRegister.setOnClickListener(view-> {
                 String name = nameR.getText().toString().trim();
                 String email = emailR.getText().toString().trim();
                 String dob = dobR.getText().toString().trim();
@@ -99,7 +106,7 @@ public class Register<FirebaseAuth> extends AppCompatActivity {
 
                 //check whether email address is empty or not
                 if(TextUtils.isEmpty(dob)){
-                    emailR.setError("Email Address is required");
+                    emailR.setError("Birthdate is required");
                     return;
                 }
 
@@ -115,49 +122,61 @@ public class Register<FirebaseAuth> extends AppCompatActivity {
                     return;
                 }
 
-                //User Method call
-                user = new User (name, email, dob, password);
-
-                //create user by calling registerUser function
-                registerUser(email,password);
-
-                //Call function to empty All EditText
-                emptyInputEditText();
-            }
-        });
-    }
-
-    private void registerUser(String email,String password) {
-        //Register the user in firebase
-        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    updateUI(user);
+            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
 
                     //display snackbar with green background
-                    View view = findViewById(android.R.id.content);
+                    View v = findViewById(android.R.id.content);
                     String message = "Account Created Successfully";
                     int duration = Snackbar.LENGTH_LONG;
 
-                    snackbar = Snackbar.make(view, message, duration)
+                    snackbar = Snackbar.make(v, message, duration)
                             .setAction("Action", null);
                     View sbView = snackbar.getView();
                     sbView.setBackgroundColor(Color.GREEN);
                     snackbar.show();
 
-                    //Toast.makeText(Register.this,"Account Created",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(), ExploreAdapter.class));
+                    DocumentReference documentReference = fStore.collection("Event/Users").document(String.valueOf(user));
 
+                    //store the data in the document --> hash map
+                    Map<String, Object> users = new HashMap<String, Object>();
+                    users.put("rName", nameR);
+                    users.put("rEmail", emailR);
+                    users.put("rDob", dobR);
+                    users.put("rPassword", passwordR);
+
+                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                        @Override
+                        public void onComplete(@NonNull Task<String> task) {
+                            if (!task.isSuccessful()) {
+                                return;
+                            }
+                            // Get new FCM registration token
+                            String token= task.getResult();
+                            users.put("notificationToken",token);
+                            // now insert into cloud database
+                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>(){
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d("TAG", "onSuccess: user Profile is created for" + user);
+                                }
+                            });
+
+                        }
+
+                    });
+                    Intent intent = new Intent(Register.this, ExploreAdapter.class);
+                    startActivity(intent);
+                    //User Method call create new user in user class
+                    user = new User (name, email, dob, password);
                 }
                 else{
                     //display snackbar with red background
-                    View view = findViewById(android.R.id.content);
+                    View vi = findViewById(android.R.id.content);
                     String message = "Email ID already exits";
                     int duration = Snackbar.LENGTH_LONG;
 
-                    snackbar = Snackbar.make(view, message, duration)
+                    snackbar = Snackbar.make(vi, message, duration)
                             .setAction("Action", null);
                     View sbView = snackbar.getView();
                     sbView.setBackgroundColor(Color.RED);
@@ -167,9 +186,16 @@ public class Register<FirebaseAuth> extends AppCompatActivity {
                     updateUI(null);
                     //progressBar.setVisibility(View.INVISIBLE);
                 }
-            }
+
+
+
+                //Call function to empty All EditText
+                emptyInputEditText();
+
+            });
         });
     }
+
 
     /**
      * This method is to empty all input edit text
@@ -206,17 +232,17 @@ public class Register<FirebaseAuth> extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
-
-    //CLICK REGISTER BUTTON
-    public void submitRegister(){
-        //add data to data base
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference();//databasereference
-
-        String uid = currentUser.getUid();
-        DatabaseReference userRef = databaseReference.child("Events");//Create child node reference
-        userRef.child(uid).setValue(user);//Insert value to child node
-    }
+//
+//    //CLICK REGISTER BUTTON
+//    public void submitRegister(){
+//        //add data to data base
+//        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+//        DatabaseReference databaseReference = firebaseDatabase.getReference();//databasereference
+//
+//        String uid = currentUser.getUid();
+//        DatabaseReference userRef = databaseReference.child("Events");//Create child node reference
+//        userRef.child(uid).setValue(user);//Insert value to child node
+//    }
 
 //    public void signOut(){
 //        FirebaseAuth.getInstance().signOut();
