@@ -7,7 +7,7 @@ public class User {
     private String email;
     private String birthday;
     private String passwordHash;
-    //private List<Event> reservations;
+    private List<Event> reservations;
 
     public User(String name, String email, String birthday, String passwordHash) {
         this.name = name;
@@ -64,16 +64,16 @@ public class User {
 //        this.location = location;
 //    }
 //
-//    public List<Event> getReservations() {
-//        return reservations;
-//    }
-//
-//    public void makeReservation(Event event){
-//        reservations.add(event);
-//    }
-//
-//    public void removeReservation(Event event){
-//        reservations.remove(event);
-//    }
+    public List<Event> getReservations() {
+        return reservations;
+    }
+
+    public void makeReservation(Event event){
+        reservations.add(event);
+    }
+
+    public void removeReservation(Event event){
+        reservations.remove(event);
+    }
 
 }

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/graident_background"
     tools:context=".ui.explore.ExploreFragment">
 
 
@@ -27,9 +28,12 @@
         android:id="@+id/searchView"
         android:layout_width="fill_parent"
         android:layout_height="?attr/actionBarSize"
-        android:padding="10dp"
         android:layout_margin="5dp"
-        android:queryHint="Search..." />
+        android:background="@color/grey"
+        android:iconifiedByDefault="false"
+        android:queryHint="@string/search_hint"
+        app:defaultQueryHint="@string/search_hint"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"

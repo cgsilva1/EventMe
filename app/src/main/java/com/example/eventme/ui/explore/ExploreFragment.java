@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +34,7 @@ public class ExploreFragment extends Fragment {
     ArrayList<Event> data;
     RecyclerView recyclerView;
     SearchView searchView;
+    ExploreAdapter adapterClass;
     private FragmentExploreBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -47,6 +49,7 @@ public class ExploreFragment extends Fragment {
        // manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         searchView = root.findViewById(R.id.searchView);
 
         final androidx.appcompat.widget.SearchView searchView = binding.searchView;
@@ -67,7 +70,7 @@ public class ExploreFragment extends Fragment {
                             data.add(ds.getValue(Event.class)); //adding data to array list from firebase
                         }
 
-                        ExploreAdapter adapterClass = new ExploreAdapter(data);
+                        adapterClass = new ExploreAdapter(data);
                         recyclerView.setAdapter(adapterClass);
                     }
                 }

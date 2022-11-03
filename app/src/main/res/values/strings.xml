@@ -4,6 +4,14 @@
     <string name="title_map">Map</string>
     <string name="title_profile">Profile</string>
 
+    //EXPLORE
+    <string name="search_hint">Search...</string>
+
+    //PROFILE
+    <string name="signin_prompt">Already have an account?</string>
+    <string name="create_prompt">Are you a new user?</string>
+    <string name="logo">logo</string>
+
     //LOGIN
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
@@ -19,7 +27,7 @@
     <string name="title_activity_reg">RegisterActivity</string>
     <string name="prompt_name_reg">Name</string>
     <string name="prompt_email_reg">Email</string>
-    <string name="prompt_dob_reg">Birthdate</string>
+    <string name="prompt_dob_reg">Birthdate (mm/dd/yyyy)</string>
     <string name="prompt_password_reg">Password</string>
     <string name="prompt_confirm_password_reg">Confirm Password</string>
     <string name="action_register">Register</string>

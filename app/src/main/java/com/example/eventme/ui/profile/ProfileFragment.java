@@ -63,6 +63,9 @@ public class ProfileFragment extends Fragment {
         startActivity(intent);
     }
 
+    public void loggedIn(){
+
+    }
 
 
     @Override
