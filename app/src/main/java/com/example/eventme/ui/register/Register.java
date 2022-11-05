@@ -167,38 +167,40 @@ public class Register extends AppCompatActivity {
         userInfo.setEmail(email);
         userInfo.setBirthday(dob);
         userInfo.setPasswordHash(password);
+        databaseReference.push().setValue(new User(name, email, dob, password));
+
 
         // we are use add value event listener method
         // which is called with database reference.
 
-        ValueEventListener userListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // inside the method of on Data change we are setting
-                // our object class to our database reference.
-                // database reference will sends data to firebase.
-
-                //TESTING READING
-                //String value = snapshot.getValue(String.class);
-                //Log.d("TAG", "Value is:" + value);
-
-                databaseReference.setValue(userInfo);
-                //databaseReference.child("users").child(userInfo.getEmail()).setValue(userInfo);
-                //usersRef.child(userInfo.getEmail()).setValue(userInfo);
-                //databaseReference.child("users").child(userInfo.getEmail()).setValue(userInfo);
-                //usersRef.child("gracehop").setValue(new User("December 9, 1906", "Grace Hopper"));
-                // after adding this data we are showing toast message.
-                Toast.makeText(Register.this, "data added", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // if the data is not added or it is cancelled then
-                // we are displaying a failure toast message.
-                Toast.makeText(Register.this, "Fail to add data " + error, Toast.LENGTH_SHORT).show();
-            }
-        };
-        databaseReference.addValueEventListener(userListener);
+//        ValueEventListener userListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                // inside the method of on Data change we are setting
+//                // our object class to our database reference.
+//                // database reference will sends data to firebase.
+//
+//                //TESTING READING
+//                //String value = snapshot.getValue(String.class);
+//                //Log.d("TAG", "Value is:" + value);
+//
+//                databaseReference.setValue(userInfo);
+//                //databaseReference.child("users").child(userInfo.getEmail()).setValue(userInfo);
+//                //usersRef.child(userInfo.getEmail()).setValue(userInfo);
+//                //databaseReference.child("users").child(userInfo.getEmail()).setValue(userInfo);
+//                //usersRef.child("gracehop").setValue(new User("December 9, 1906", "Grace Hopper"));
+//                // after adding this data we are showing toast message.
+//                Toast.makeText(Register.this, "data added", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                // if the data is not added or it is cancelled then
+//                // we are displaying a failure toast message.
+//                Toast.makeText(Register.this, "Fail to add data " + error, Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//        databaseReference.addValueEventListener(userListener);
 
         Intent intent = new Intent(Register.this, LoginActivity.class);
         startActivity(intent);
