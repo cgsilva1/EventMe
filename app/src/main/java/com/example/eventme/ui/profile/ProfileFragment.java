@@ -53,7 +53,7 @@ public class ProfileFragment extends Fragment {
     FirebaseAuth mAuth;
     FirebaseFirestore fStore;
     StorageReference storageReference;
-    boolean userLoggedIn = true; //user not signed in
+    boolean userLoggedIn = false; //user not signed in
 
 
 //    TO DO:
@@ -171,7 +171,7 @@ public class ProfileFragment extends Fragment {
         if(mAuth.getInstance().getCurrentUser() != null){ //user is signed in
             userLoggedIn = true;
         }
-        return false;
+        return userLoggedIn;
     }
 
     public void sendUploadPicture(){

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.example.eventme.User;
 import com.example.eventme.ui.explore.ExploreAdapter;
 import com.example.eventme.ui.login.LoginActivity;
 import com.example.eventme.ui.login.LoginViewModel;
+import com.example.eventme.ui.profile.ProfileFragment;
+import com.example.eventme.ui.profile.ProfileViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -45,8 +48,10 @@ public class Register extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     // Reference for Firebase.
     DatabaseReference databaseReference;
+    DatabaseReference usersRef;
     // creating a variable for our object class
     User userInfo;
+    String userID;
 
     FirebaseUser currentUser;
 
@@ -73,14 +78,16 @@ public class Register extends AppCompatActivity {
         passwordR = findViewById(R.id.passwordReg);
         confirmPasswordR = findViewById(R.id.confirmPasswordReg);
 
-        submitRegister = findViewById(R.id.registerBtn);
+        submitRegister = (Button) findViewById(R.id.registerBtn);
         //txtalreadyamember = findViewById(R.id.txtAlreadyAMember);
 
 
         //get the instance of our Firebase database.
         firebaseDatabase = FirebaseDatabase.getInstance();
-        //get reference for our database.
-        databaseReference = firebaseDatabase.getReference("Events/Users");
+        //get reference for our database
+        databaseReference = firebaseDatabase.getReference("User");
+        usersRef = databaseReference.child("users");
+        //databaseReference.setValue("TESTING");
 
         // initializing our object class variable
         userInfo = new User();
@@ -125,7 +132,7 @@ public class Register extends AppCompatActivity {
 
                 //check whether dob address is empty or not
                 if(TextUtils.isEmpty(dob)){
-                    emailR.setError("Birthdate is required");
+                    dobR.setError("Birthdate is required");
                     return;
                 }
 
@@ -140,83 +147,23 @@ public class Register extends AppCompatActivity {
                     confirmPasswordR.setError("Password does not match");
                     return;
                 }
+                //for testing fors up to here its redirect to login
+//                Intent intent = new Intent(Register.this, LoginActivity.class);
+//                startActivity(intent);
 
-            addDatatoFirebase(name, email, dob, password);
+                Toast.makeText(Register.this, "Account Created, Welcome!", Toast.LENGTH_SHORT).show();
 
-//            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(task -> {
-//                if (task.isSuccessful()) {
-//
-//                    //display snackbar with green background
-//                    View v = findViewById(android.R.id.content);
-//                    String message = "Account Created Successfully";
-//                    int duration = Snackbar.LENGTH_LONG;
-//
-//                    snackbar = Snackbar.make(v, message, duration)
-//                            .setAction("Action", null);
-//                    View sbView = snackbar.getView();
-//                    sbView.setBackgroundColor(Color.GREEN);
-//                    snackbar.show();
-//
-//                    DocumentReference documentReference = fStore.collection("Event/Users").document(String.valueOf(user));
-//
-//                    //store the data in the document --> hash map
-//                    Map<String, Object> users = new HashMap<String, Object>();
-//                    users.put("rName", nameR);
-//                    users.put("rEmail", emailR);
-//                    users.put("rDob", dobR);
-//                    users.put("rPassword", passwordR);
-//
-//                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<String> task) {
-//                            if (!task.isSuccessful()) {
-//                                return;
-//                            }
-//                            // Get new FCM registration token
-//                            String token= task.getResult();
-//                            users.put("notificationToken",token);
-//                            // now insert into cloud database
-//                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>(){
-//                                @Override
-//                                public void onSuccess(Void aVoid) {
-//                                    Log.d("TAG", "onSuccess: user Profile is created for" + user);
-//                                }
-//                            });
-//
-//                        }
-//
-//                    });
-//                    Intent intent = new Intent(Register.this, ExploreAdapter.class);
-//                    startActivity(intent);
-//                    //User Method call create new user in user class
-//                    user = new User (name, email, dob, password);
-//                }
-//                else{
-//                    //display snackbar with red background
-//                    View vi = findViewById(android.R.id.content);
-//                    String message = "Email ID already exits";
-//                    int duration = Snackbar.LENGTH_LONG;
-//
-//                    snackbar = Snackbar.make(vi, message, duration)
-//                            .setAction("Action", null);
-//                    View sbView = snackbar.getView();
-//                    sbView.setBackgroundColor(Color.RED);
-//                    snackbar.show();
-//
-//                    Toast.makeText(Register.this,"Error Occured" + task.getException(),Toast.LENGTH_SHORT).show();
-//                    updateUI(null);
-//                    //progressBar.setVisibility(View.INVISIBLE);
-//                }
-//
+
+                addDataToFirebase(name, email, dob, password);
+
 //                //Call function to empty All EditText
 //                emptyInputEditText();
-//
-//            });
+
             }
         });
     }
 
-    private void addDatatoFirebase(String name, String email, String dob, String password) {
+    private void addDataToFirebase(String name, String email, String dob, String password) {
         // below 3 lines of code is used to set
         // data in our object class.
         userInfo.setName(name);
@@ -226,14 +173,24 @@ public class Register extends AppCompatActivity {
 
         // we are use add value event listener method
         // which is called with database reference.
-        databaseReference.addValueEventListener(new ValueEventListener() {
+
+        ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // inside the method of on Data change we are setting
                 // our object class to our database reference.
-                // data base reference will sends data to firebase.
-                databaseReference.setValue(userInfo);
+                // database reference will sends data to firebase.
 
+                //TESTING READING
+                //String value = snapshot.getValue(String.class);
+                //Log.d("TAG", "Value is:" + value);
+                //userID = currentUser.getUid();
+                databaseReference.child("User").push().setValue(userInfo);
+                databaseReference.setValue(userInfo);
+                //databaseReference.child("users").child(userInfo.getEmail()).setValue(userInfo);
+                //usersRef.child(userInfo.getEmail()).setValue(userInfo);
+                //databaseReference.child("users").child(userInfo.getEmail()).setValue(userInfo);
+                //usersRef.child("gracehop").setValue(new User("December 9, 1906", "Grace Hopper"));
                 // after adding this data we are showing toast message.
                 Toast.makeText(Register.this, "data added", Toast.LENGTH_SHORT).show();
             }
@@ -244,7 +201,10 @@ public class Register extends AppCompatActivity {
                 // we are displaying a failure toast message.
                 Toast.makeText(Register.this, "Fail to add data " + error, Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+        databaseReference.addValueEventListener(userListener);
+        Intent intent = new Intent(Register.this, ContactsContract.Profile.class);
+        startActivity(intent);
     }
 
 
@@ -273,7 +233,7 @@ public class Register extends AppCompatActivity {
 
             String uid = currentUser.getUid();
             DatabaseReference userRef = databaseReference.child("Events");//Create child node reference
-            userRef.child(uid).setValue(user);//Insert value to child node
+            userRef.child("User").child(uid).setValue(user);//Insert value to child node
         }
     }
 

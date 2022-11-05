@@ -80,4 +80,10 @@ public class User {
         reservations.remove(event);
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }
