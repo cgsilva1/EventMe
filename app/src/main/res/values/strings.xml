@@ -8,6 +8,9 @@
     <string name="search_hint">Search...</string>
 
     //PROFILE
+    <string name="profile_image">Profile image</string>
+    <string name="name_profile">Name</string>
+    <string name="dob">Birthday</string>
     <string name="signin_prompt">Already have an account?</string>
     <string name="create_prompt">Are you a new user?</string>
     <string name="logo">logo</string>
