@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventme.Event;
@@ -23,16 +24,62 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
     User user;
     ArrayList<Event> data;
 
-
     String date;
     //Constructor
-    public ExploreAdapter(ArrayList<Event> data){
+    public ExploreAdapter(Context context, ArrayList<Event> data){
+        this.context = context;
         this.data = data;
     }
-//    public void setCard(ArrayList<Event> data) {
-//        this.data = data;
-//        notifyDataSetChanged();
+
+    @NonNull
+    @Override
+    public ExploreAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_holder, viewGroup, false);
+        //view = inflater.inflate(R.layout.card_holder, viewGroup, false);
+        return new MyViewHolder(view);
+    }
+//    public ExploreAdapter(Context context){
+//        this.context = context;
 //    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ExploreAdapter.MyViewHolder holder, int position) {
+//        final Event events = data.get(position);
+//        holder.name.setText(events.getName());
+
+        //Glide.with(context).load(events.getUrl()).into(holder.desc);
+        Event event = data.get(position);
+        holder.name.setText(event.getName());
+        holder.desc.setText(event.getDescription());
+//        MyViewHolder vh = (MyViewHolder) holder;
+////
+//        vh.name.setText(data.get(position).getName());
+//        vh.desc.setText(data.get(position).getDescription());
+    }
+
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder{
+        private final TextView name;
+        private final TextView desc;
+        CardView cardView;
+        //need to add other parameters of event
+
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            name = itemView.findViewById(R.id.eventName);
+            desc = itemView.findViewById(R.id.description);
+            cardView = itemView.findViewById(R.id.card_view);
+        }
+    }
+
+    public void setCard(ArrayList<Event> data) {
+        this.data = data;
+        notifyDataSetChanged();
+    }
 
     //@TODO specify item for efficiency purposes
     public void add(Event rs) {
@@ -54,38 +101,5 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
             if (e.name.equals(name)) return e;
         }
         return null;
-    }
-
-    @NonNull
-    @Override
-    public ExploreAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_holder,viewGroup, false);
-        return new MyViewHolder(view, viewType);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ExploreAdapter.MyViewHolder holder, int position) {
-        MyViewHolder vh = (MyViewHolder) holder;
-        Event event = data.get(position);
-
-        vh.name.setText(data.get(position).getName());
-        vh.desc.setText(data.get(position).getDescription());
-    }
-
-    @Override
-    public int getItemCount() {
-        return data.size();
-    }
-
-    class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView name;
-        TextView desc;
-        //need to add other parameters of event
-
-        public MyViewHolder(@NonNull View itemView, int viewType) {
-            super(itemView);
-            name = itemView.findViewById(R.id.eventName);
-            desc = itemView.findViewById(R.id.description);
-        }
     }
 }

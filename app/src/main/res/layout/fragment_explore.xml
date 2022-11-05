@@ -40,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
+        android:background="@color/teal_200"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 

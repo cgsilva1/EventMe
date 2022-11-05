@@ -161,8 +161,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void addDataToFirebase(String name, String email, String dob, String password) {
-        // below 3 lines of code is used to set
-        // data in our object class.
+        // set data in our object class.
         userInfo.setName(name);
         userInfo.setEmail(email);
         userInfo.setBirthday(dob);
@@ -228,8 +227,6 @@ public class Register extends AppCompatActivity {
 
     private void updateUI(FirebaseUser currentUser) {
         if (user != null) {
-
-
             String uid = currentUser.getUid();
             DatabaseReference userRef = databaseReference.child("Events");//Create child node reference
             userRef.child("User").child(uid).setValue(user);//Insert value to child node
