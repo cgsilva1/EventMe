@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,8 +20,6 @@ import com.example.eventme.User;
 import com.example.eventme.ui.explore.ExploreAdapter;
 import com.example.eventme.ui.login.LoginActivity;
 import com.example.eventme.ui.login.LoginViewModel;
-import com.example.eventme.ui.profile.ProfileFragment;
-import com.example.eventme.ui.profile.ProfileViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -184,8 +181,7 @@ public class Register extends AppCompatActivity {
                 //TESTING READING
                 //String value = snapshot.getValue(String.class);
                 //Log.d("TAG", "Value is:" + value);
-                //userID = currentUser.getUid();
-                databaseReference.child("User").push().setValue(userInfo);
+
                 databaseReference.setValue(userInfo);
                 //databaseReference.child("users").child(userInfo.getEmail()).setValue(userInfo);
                 //usersRef.child(userInfo.getEmail()).setValue(userInfo);
@@ -203,7 +199,8 @@ public class Register extends AppCompatActivity {
             }
         };
         databaseReference.addValueEventListener(userListener);
-        Intent intent = new Intent(Register.this, ContactsContract.Profile.class);
+
+        Intent intent = new Intent(Register.this, LoginActivity.class);
         startActivity(intent);
     }
 
