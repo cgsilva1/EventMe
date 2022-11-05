@@ -9,6 +9,10 @@ public class User {
     private String passwordHash;
     private List<Event> reservations;
 
+    public User(){
+
+    }
+
     public User(String name, String email, String birthday, String passwordHash) {
         this.name = name;
         this.email = email;
