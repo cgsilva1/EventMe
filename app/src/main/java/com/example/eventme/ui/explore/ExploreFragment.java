@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 import java.util.ArrayList;
 
 public class ExploreFragment extends Fragment {
@@ -41,6 +42,10 @@ public class ExploreFragment extends Fragment {
     SearchView searchView;
     ExploreAdapter adapter;
     private FragmentExploreBinding binding;
+    FirebaseDatabase firebaseDatabase;
+    //DatabaseReference dbRef = firebaseDatabase.getReference("Event");
+    ArrayList<Event> events = new ArrayList<>();
+    String[] nums = new String[]{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
 
     String eventID;
 
