@@ -1,70 +1,38 @@
 package com.example.eventme.ui.login;
 
-import android.app.Activity;
+        import android.content.Intent;
+        import android.os.Bundle;
+        import android.text.TextUtils;
+        import android.widget.Button;
+        import android.widget.EditText;
+        import android.widget.Toast;
+        import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
+        import com.example.eventme.MainActivity;
+        import com.google.firebase.auth.FirebaseAuth;
+        import java.util.Objects;
+        import java.util.concurrent.atomic.AtomicBoolean;
+        import com.example.eventme.R;
 
-import android.content.Intent;
-import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.eventme.R;
-import com.example.eventme.ui.explore.ExploreAdapter;
-import com.example.eventme.ui.login.LoginViewModel;
-import com.example.eventme.ui.login.LoginViewModelFactory;
-import com.example.eventme.databinding.ActivityLoginBinding;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginViewModel loginViewModel;
-    private ActivityLoginBinding binding;
-
     EditText uEmail, uPassword;
-    FirebaseAuth mAuth;
+    FirebaseAuth fAuth;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
-        binding = ActivityLoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
-                .get(LoginViewModel.class);
-
-        //uEmail = binding.username;
         uEmail = findViewById(R.id.username);
-        //uPassword = binding.password;
         uPassword = findViewById(R.id.password);
-        //Button loginButton = binding.login;
-        Button loginButton = findViewById(R.id.login);
-        mAuth = FirebaseAuth.getInstance();
-        ProgressBar loadingProgressBar = binding.loading;
+        fAuth = FirebaseAuth.getInstance();
+        Button logIn = findViewById(R.id.login);
 
-        loginButton.setOnClickListener(view -> {
+        logIn.setOnClickListener(view -> {
             String email = uEmail.getText().toString().trim();
             String password = uPassword.getText().toString().trim();
-
             //check whether name is empty or not
             if (TextUtils.isEmpty(email)) {
                 uEmail.setError("Email is required");
@@ -76,28 +44,59 @@ public class LoginActivity extends AppCompatActivity {
                 uPassword.setError("Password is required");
                 return;
             }
+            int valid=checkFields(email,password);
+            if(valid!=0){
+                if(valid==1){
+                    uEmail.setError("Please enter a valid email");
+                }
+                if(valid==2){
+                    uPassword.setError("Please enter a valid password");
+                }
+            }
+
 
             //authenticate user
-            boolean success = authenticate(email, password);
+            boolean success=authenticate(email, password);
 
         });
-    }
 
+    }
     protected boolean authenticate(String email, String password){
         AtomicBoolean success= new AtomicBoolean(false);
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+        fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if(task.isSuccessful())
             {
                 success.set(true);
                 Toast.makeText(LoginActivity.this, "Log in was successful, Welcome!", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(LoginActivity.this, ExploreAdapter.class));
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
             }
+
             else
             {
                 Toast.makeText(LoginActivity.this, "Error logging in!" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
         return success.get();
     }
+    public static int checkFields(String email, String password){
+        // validate the data in email and password - check for empty fields and such
+        if (TextUtils.isEmpty(email)) {
+            return 1;
+        }
 
+        if (TextUtils.isEmpty(password)) {
+            return 2;
+        }
+
+        if (password.length() < 6) {
+            return 2;
+        }
+        if(!email.contains("@")){
+
+            return 1;
+        }
+        return 0;
+    }
 }

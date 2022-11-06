@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.eventme">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -28,6 +28,9 @@
         <meta-data android:name="come.google.android.geo.API_KEY"
             android:value="@string/map_key"></meta-data>
         <activity
+            android:name=".Details"
+            android:exported="false" />
+        <activity
             android:name=".ui.register.Register"
             android:exported="false" />
         <activity
@@ -44,6 +47,5 @@
             </intent-filter>
         </activity>
     </application>
-
 
 </manifest>

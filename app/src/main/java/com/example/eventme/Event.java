@@ -6,17 +6,17 @@ public class Event {
     public String name;
     private String category;
     private String date;
-    private Location location;
-    private Time time;
+    private String location;
+    private String time;
     private double cost;
     private String sponsor;
     private String description;
     private int peopleRegistered;
 
-//    public Event() {
-//    }
+    public Event() {
+    }
 
-    public Event(String name, String category, String date, Location location, Time time, double cost, String sponsor, String description, int peopleRegistered) {
+    public Event(String name, String category, String date, String location, String time, double cost, String sponsor, String description, int peopleRegistered) {
         this.name = name;
         this.category = category;
         this.date = date;
@@ -53,19 +53,19 @@ public class Event {
         this.date = date;
     }
 
-    public Location getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
-    public Time getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
