@@ -13,8 +13,8 @@ public class Event {
     private String description;
     private int peopleRegistered;
 
-//    public Event() {
-//    }
+    public Event() {
+    }
 
     public Event(String name, String category, String date, String location, String time, double cost, String sponsor, String description, int peopleRegistered) {
         this.name = name;
