@@ -18,6 +18,7 @@
         <entry key="app/src/main/res/drawable/register_btn.xml" value="0.1" />
         <entry key="app/src/main/res/layout-w1240dp/activity_login.xml" value="0.2248995983935743" />
         <entry key="app/src/main/res/layout-w936dp/activity_login.xml" value="0.22882513661202186" />
+        <entry key="app/src/main/res/layout/activity_details.xml" value="0.1621376811594203" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.30344202898550726" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3359375" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.2346014492753623" />

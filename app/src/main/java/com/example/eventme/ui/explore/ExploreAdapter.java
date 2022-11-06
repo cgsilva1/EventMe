@@ -1,6 +1,7 @@
 package com.example.eventme.ui.explore;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,12 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.eventme.Details;
 import com.example.eventme.Event;
 import com.example.eventme.R;
 import com.example.eventme.User;
+
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -36,7 +40,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
     public ExploreAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_holder, viewGroup, false);
         //view = inflater.inflate(R.layout.card_holder, viewGroup, false);
-        return new MyViewHolder(view);
+        return new ExploreAdapter.MyViewHolder(view);
     }
 //    public ExploreAdapter(Context context){
 //        this.context = context;
@@ -44,17 +48,12 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ExploreAdapter.MyViewHolder holder, int position) {
-//        final Event events = data.get(position);
-//        holder.name.setText(events.getName());
-
-        //Glide.with(context).load(events.getUrl()).into(holder.desc);
         Event event = data.get(position);
+//        holder.name.setText(model.getName());
+//        holder.desc.setText(model.getDescription());
         holder.name.setText(event.getName());
-        holder.desc.setText(event.getDescription());
-//        MyViewHolder vh = (MyViewHolder) holder;
-////
-//        vh.name.setText(data.get(position).getName());
-//        vh.desc.setText(data.get(position).getDescription());
+        holder.cat.setText(event.getCategory());
+        holder.loc.setText(event.getLocation());
     }
 
     @Override
@@ -63,16 +62,20 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
-        private final TextView name;
-        private final TextView desc;
-        CardView cardView;
+        TextView name;
+        TextView cat;
+        TextView loc;
+
+        //CardView cardView;
         //need to add other parameters of event
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.eventName);
-            desc = itemView.findViewById(R.id.description);
-            cardView = itemView.findViewById(R.id.card_view);
+            cat = itemView.findViewById(R.id.category);
+            loc = itemView.findViewById(R.id.address);
+            //cardView = itemView.findViewById(R.id.card_view);
+
         }
     }
 

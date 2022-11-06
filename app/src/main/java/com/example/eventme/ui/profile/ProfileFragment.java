@@ -182,7 +182,7 @@ public class ProfileFragment extends Fragment {
     }
 
     public void sendSignOut(){
-//        mAuth.signOut();
+  //      mAuth.signOut();
         userLoggedIn = true;
         Intent intent = new Intent(getActivity(), ExploreFragment.class); //send back to explore page
         startActivity(intent);
