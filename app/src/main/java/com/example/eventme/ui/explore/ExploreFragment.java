@@ -66,9 +66,9 @@ public class ExploreFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if(dataSnapshot.exists()){
                         data = new ArrayList<>();
-                        for(DataSnapshot ds : dataSnapshot.getChildren()){
-                            data.add(ds.getValue(Event.class)); //adding data to array list from firebase
-                        }
+//                        for(DataSnapshot ds : dataSnapshot.getChildren()){
+//                            data.add(ds.getValue(Event.class)); //adding data to array list from firebase
+//                        }
 
                         adapterClass = new ExploreAdapter(data);
                         recyclerView.setAdapter(adapterClass);
