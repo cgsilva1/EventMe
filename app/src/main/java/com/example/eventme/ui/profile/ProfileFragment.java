@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import com.example.eventme.MainActivity;
 import com.example.eventme.R;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -94,12 +96,16 @@ public class ProfileFragment extends Fragment {
             logo.setVisibility(View.GONE);
             loginButton.setVisibility(View.GONE);
             createAccountButton.setVisibility(View.GONE);
-
             mAuth = FirebaseAuth.getInstance();
             fStore = FirebaseFirestore.getInstance();
             storageReference = FirebaseStorage.getInstance().getReference();
 //            final StorageReference profileReference = storageReference.child("Users/"+ Objects.requireNonNull(mAuth.getCurrentUser()).getUid()+"/profile.jpg");
 //            profileReference.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(profileImage));
+
+
+//            TextView tv = (TextView) root.findViewById(R.id.name_profile);
+//            tv.setText(mAuth.getInstance().getCurrentUser().getUid());
+
 
             //userID = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
             //DocumentReference documentReference = fStore.collection("Users").document(userID);
@@ -182,9 +188,9 @@ public class ProfileFragment extends Fragment {
     }
 
     public void sendSignOut(){
-//        mAuth.signOut();
+        mAuth.signOut();
         userLoggedIn = true;
-        Intent intent = new Intent(getActivity(), ExploreFragment.class); //send back to explore page
+        Intent intent = new Intent(getActivity(), MainActivity.class); //send back to explore page
         startActivity(intent);
     }
 

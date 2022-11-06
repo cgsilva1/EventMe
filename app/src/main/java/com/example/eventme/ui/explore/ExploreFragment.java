@@ -17,6 +17,7 @@ import com.example.eventme.Event;
 import com.example.eventme.R;
 import com.example.eventme.databinding.FragmentExploreBinding;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -27,9 +28,17 @@ public class ExploreFragment extends Fragment {
     SearchView searchView;
     ExploreAdapter adapter;
     private FragmentExploreBinding binding;
+    FirebaseDatabase firebaseDatabase;
+    //DatabaseReference dbRef = firebaseDatabase.getReference("Event");
+    ArrayList<Event> events = new ArrayList<>();
+    String[] nums = new String[]{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
+
+
+
         ExploreViewModel exploreViewModel = new ViewModelProvider(this).get(ExploreViewModel.class);
 
         binding = FragmentExploreBinding.inflate(inflater, container, false);
