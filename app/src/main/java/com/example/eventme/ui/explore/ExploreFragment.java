@@ -60,6 +60,35 @@ public class ExploreFragment extends Fragment {
         ref = FirebaseDatabase.getInstance().getReference();
         recyclerView = root.findViewById(R.id.rv);
 
+       // manager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        searchView = root.findViewById(R.id.searchView);
+
+        final androidx.appcompat.widget.SearchView searchView = binding.searchView;
+       // exploreViewModel.getText().observe(getViewLifecycleOwner(), searchView::setText);
+        return root;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(ref != null){
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if(dataSnapshot.exists()){
+                        data = new ArrayList<>();
+//                        for(DataSnapshot ds : dataSnapshot.getChildren()){
+//                            data.add(ds.getValue(Event.class)); //adding data to array list from firebase
+//                        }
+
+                        adapterClass = new ExploreAdapter(data);
+                        recyclerView.setAdapter(adapterClass);
+                    }
+                }
+
         // To display the Recycler view linearly
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
