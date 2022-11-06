@@ -1,5 +1,7 @@
 package com.example.eventme;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class User {
@@ -8,6 +10,8 @@ public class User {
     private String birthday;
     private String passwordHash;
     private List<Event> reservations;
+
+    public static HashMap<String, String> keys = new HashMap<>();
 
     public User(){
 
@@ -21,6 +25,8 @@ public class User {
        // this.reservations = reservations;
 //        this.location = location;
     }
+
+
 
     public String getName() {
         return name;
