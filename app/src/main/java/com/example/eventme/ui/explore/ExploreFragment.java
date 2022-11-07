@@ -44,6 +44,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.concurrent.Semaphore;
 
@@ -58,8 +60,8 @@ public class ExploreFragment extends Fragment {
     private FragmentExploreBinding binding;
     FirebaseDatabase firebaseDatabase;
     //DatabaseReference dbRef = firebaseDatabase.getReference("Event");
+    ArrayList<Event> shown_events;
     ArrayList<Event> events;
-    ArrayList<Event> results = new ArrayList<>();
     FirebaseFirestore db;
     String[] nums = new String[]{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
 
@@ -78,19 +80,24 @@ public class ExploreFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        shown_events = new ArrayList<>();
+        events = new ArrayList<>();
 
         db = FirebaseFirestore.getInstance();
-        events = new ArrayList<Event>();
-        adapter = new ExploreAdapter(getContext(), events);
+
+        adapter = new ExploreAdapter(getContext(), shown_events);
 
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { //taking in what user is entering in search bar
                 @Override
                 public boolean onQueryTextSubmit(String s) {
+                    resetList();
                     if(s.equals("")){
                         return true;
                     }
                     search(s);
+                    sortBy("distance");
+                    adapter.notifyDataSetChanged();
                     searchView.clearFocus();
                     return true;
                 }
@@ -98,6 +105,9 @@ public class ExploreFragment extends Fragment {
                 @Override
                 public boolean onQueryTextChange(String s) {
                     if(s.equals("")){
+                        resetList();
+                        sortBy("distance");
+                        adapter.notifyDataSetChanged();
                         searchView.clearFocus();
                     }
                     return true;
@@ -110,16 +120,18 @@ public class ExploreFragment extends Fragment {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-
                         if(error!=null){
                             Log.e("Firestore error ", error.getMessage());
                         }
                         for(DocumentChange dc: value.getDocumentChanges()){
                             if(dc.getType()==DocumentChange.Type.ADDED){
-                                events.add(dc.getDocument().toObject(Event.class));
+                                Event event = dc.getDocument().toObject(Event.class);
+                                shown_events.add(event);
+                                events.add(event);
 
                             }
                         }
+                        sortBy("distance");
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -132,20 +144,86 @@ public class ExploreFragment extends Fragment {
     }
 
     private void search(String str){
-        if(str.equals("")){
-            getActivity().recreate();
-        }
-        if(events != null) {
-            for (Iterator<Event> iterator = events.iterator(); iterator.hasNext(); ) {
+        if(shown_events != null) {
+            for (Iterator<Event> iterator = shown_events.iterator(); iterator.hasNext(); ) {
                 Event event = iterator.next();
                 if (!(event.getName().toLowerCase().contains(str.toLowerCase())  || event.getCategory().toLowerCase().contains(str.toLowerCase()) || event.getSponsor().toLowerCase().contains(str.toLowerCase()) || event.getLocation().toLowerCase().contains(str.toLowerCase()))){ //description matches what was entered
                     iterator.remove();
                 }
             }
         }
-        adapter.notifyDataSetChanged();
 
     }
+
+    private void resetList(){
+        for (Iterator<Event> iterator = events.iterator(); iterator.hasNext(); ) {
+            Event event = iterator.next();
+            if (!shown_events.contains(event)){ //description matches what was entered
+                shown_events.add(event);
+            }
+        }
+
+    }
+
+    private void sortBy(String sorter){
+
+        if(sorter.equals("cost")){
+            Collections.sort(shown_events, (o1, o2) -> {
+                double num =  (o2.getCost() - o1.getCost());
+                if(num<0){
+                    num = 1;
+                }
+                else if(num>0){
+                    num = -1;
+                }
+                else{
+                    num =0;
+                }
+                return (int)num;
+            });
+        }
+        else if(sorter.equals("distance")){
+            Collections.sort(shown_events, (E1, E2) -> {
+                double currLat = 34.02241412645936;
+                double currLong = -118.28525647720889;
+                double E1Lat = E1.getLatitude();
+                double E1Long = E1.getLongitude();
+                double E2Lat = E2.getLatitude();
+                double E2Long = E1.getLongitude();
+                double distanceE1 = Math.sqrt((currLat - E1Lat) * (currLat - E1Lat) + (currLong - E1Long) * (currLong - E1Long));
+                double distanceE2 = Math.sqrt((currLat - E2Lat) * (currLat - E2Lat) + (currLong - E2Long) * (currLong - E2Long));
+
+                double num =  (distanceE2 - distanceE1);
+
+                if(num<0){
+                    num = 1;
+                }
+                else if(num>0){
+                    num = -1;
+                }
+                else{
+                    num =0;
+                }
+                return (int)num;
+            });
+
+
+        }
+        else if(sorter.equals("dates")){
+
+
+
+
+        }
+        else if(sorter.equals("alpha")){
+            Collections.sort(shown_events, Comparator.comparing(Event::getName));
+        }
+
+
+    }
+
+
+
 
 
 }
