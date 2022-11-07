@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,8 +37,10 @@ import javax.xml.transform.Source;
 
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
     private Context context;
+    SearchView searchView;
     User user;
     ArrayList<Event> data;
+    RecyclerView recyclerView;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     String date;
@@ -95,6 +98,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
         holder.cost.setText("$"+event.getCost() + "0");
         holder.date.setText(event.getDate());
         holder.time.setText(event.getTime());
+
     }
 
     @Override
@@ -109,6 +113,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
         TextView cost;
         TextView date;
         TextView time;
+        Button reg;
 
         //CardView cardView;
         //need to add other parameters of event
@@ -121,6 +126,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
             cost = itemView.findViewById(R.id.cost);
             date = itemView.findViewById(R.id.date);
             time = itemView.findViewById(R.id.time);
+            reg = itemView.findViewById(R.id.eventRegisterBtn);
             //cardView = itemView.findViewById(R.id.card_view);
 
         }

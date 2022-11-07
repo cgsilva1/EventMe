@@ -57,6 +57,7 @@ public class ExploreFragment extends Fragment {
     FirebaseDatabase firebaseDatabase;
     //DatabaseReference dbRef = firebaseDatabase.getReference("Event");
     ArrayList<Event> events;
+    ArrayList<Event> results = new ArrayList<>();
     String[] nums = new String[]{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
 
     String eventID;
@@ -70,26 +71,31 @@ public class ExploreFragment extends Fragment {
         View root = binding.getRoot();
 
         recyclerView = root.findViewById(R.id.rv);
-
-
-
-        
+        searchView = root.findViewById(R.id.searchView);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-
-        FirebaseRecyclerOptions<Event> options = new FirebaseRecyclerOptions.Builder<Event>().setQuery(ref, Event.class).build();
-        data = new ArrayList<Event>();
-        data.add(new Event("name1", "cat1", "11/09/2001", "loc1", "7:00", 5, "sponsor1", "desc1", 10));
-        data.add(new Event("name2", "cat2", "11/09/2001", "loc2", "7:00", 5, "sponsor2", "desc2", 10));
-        data.add(new Event("name3", "cat3", "11/09/2001", "loc3", "7:00", 5, "sponsor3", "desc3", 10));
-        data.add(new Event("name4", "cat4", "11/09/2001", "loc4", "7:00", 5, "sponsor4", "desc4", 10));
-        //for loop through events in firebase add it to data array list and then display
-
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         events = new ArrayList<Event>();
         adapter = new ExploreAdapter(getContext(), events);
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { //taking in what user is entering in search bar
+                @Override
+                public boolean onQueryTextSubmit(String s) {
+                    String str = s;
+                    search(s);
+//                    events = results;
+//                    adapter.notifyDataSetChanged();
+                    return false;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String s) {
+                    return true;
+                }
+            });
+
 
         db.collection("Events").orderBy("cost", Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -115,15 +121,20 @@ public class ExploreFragment extends Fragment {
         return root;
     }
 
-//    @Override public void onStart(){
-//        super.onStart();
-//        adapter.startListening();
-//    }
-//
-//    @Override public void onStop(){
-//        super.onStop();
-//        adapter.startListening();
-//    }
+    private ArrayList<Event> search(String str){
+        if(events != null) {
+            for (Event object : events) { //DATA IS NULL SO NEED TO MAKE SURE ACCESEING RIGHT SPOT IN DATABASE
+                if (object.getName().toLowerCase().contains(str.toLowerCase())) { //description matches what was entered
+                    results.add(object);
+                }
+            }
+        }
+        return results;
+//        ExploreAdapter exploreAdapter = new ExploreAdapter(getContext(), results);
+//        recyclerView.setAdapter(exploreAdapter);
+    }
+
+
 }
 
 
