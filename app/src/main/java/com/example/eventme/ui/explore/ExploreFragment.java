@@ -15,6 +15,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,18 +25,22 @@ import com.example.eventme.MainActivity;
 import com.example.eventme.R;
 import com.example.eventme.databinding.FragmentExploreBinding;
 import com.example.eventme.ui.login.LoginActivity;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+
+
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+
 
 
 import java.util.ArrayList;
@@ -66,7 +71,12 @@ public class ExploreFragment extends Fragment {
 
         recyclerView = root.findViewById(R.id.rv);
 
+
+
+        
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
 
         FirebaseRecyclerOptions<Event> options = new FirebaseRecyclerOptions.Builder<Event>().setQuery(ref, Event.class).build();
         data = new ArrayList<Event>();
@@ -75,6 +85,7 @@ public class ExploreFragment extends Fragment {
         data.add(new Event("name3", "cat3", "11/09/2001", "loc3", "7:00", 5, "sponsor3", "desc3", 10));
         data.add(new Event("name4", "cat4", "11/09/2001", "loc4", "7:00", 5, "sponsor4", "desc4", 10));
         //for loop through events in firebase add it to data array list and then display
+
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         events = new ArrayList<Event>();
