@@ -15,18 +15,30 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventme.Details;
 import com.example.eventme.Event;
+import com.example.eventme.MainActivity;
 import com.example.eventme.R;
 import com.example.eventme.User;
+import com.example.eventme.ui.login.LoginActivity;
+import com.example.eventme.ui.register.Register;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Objects;
+
+import javax.xml.transform.Source;
 
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
     private Context context;
     User user;
     ArrayList<Event> data;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     String date;
     //Constructor
@@ -38,9 +50,35 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
     @NonNull
     @Override
     public ExploreAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_holder, viewGroup, false);
+        View big_view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_holder, viewGroup, false);
+        Button btn = big_view.findViewById(R.id.eventRegisterBtn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(mAuth.getCurrentUser()==null){
+                    context.startActivity(new Intent(context, LoginActivity.class));
+                }
+
+                TextView eventName = big_view.findViewById(R.id.eventName);
+                for(int i = 0; i<data.size(); i++){
+                    if(data.get(i).getName()== eventName.getText()){
+                        //register the user for this event
+                        DocumentReference dRef = FirebaseFirestore.getInstance().collection("User")
+                                .document(mAuth.getCurrentUser().getUid());
+
+                        //TODO: make sure you can't register for multiple of the same event
+                        //TODO: check times to?
+                        dRef.update("Reservations", FieldValue.arrayUnion(eventName.getText()));
+                        Toast.makeText(context, "Successfully Registered for "+eventName.getText(), Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+            }
+        });
+
         //view = inflater.inflate(R.layout.card_holder, viewGroup, false);
-        return new ExploreAdapter.MyViewHolder(view);
+        return new ExploreAdapter.MyViewHolder(big_view);
     }
 //    public ExploreAdapter(Context context){
 //        this.context = context;

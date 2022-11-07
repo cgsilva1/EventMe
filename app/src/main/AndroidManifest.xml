@@ -24,9 +24,8 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/map_key"/>
 
-        <meta-data android:name="come.google.android.geo.API_KEY"
-            android:value="@string/map_key"></meta-data>
         <activity
             android:name=".Details"
             android:exported="false" />
@@ -46,6 +45,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.map.MapActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>
