@@ -44,6 +44,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.concurrent.Semaphore;
 
 public class ExploreFragment extends Fragment {
     DatabaseReference ref;
@@ -58,6 +60,7 @@ public class ExploreFragment extends Fragment {
     //DatabaseReference dbRef = firebaseDatabase.getReference("Event");
     ArrayList<Event> events;
     ArrayList<Event> results = new ArrayList<>();
+    FirebaseFirestore db;
     String[] nums = new String[]{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
 
     String eventID;
@@ -75,7 +78,7 @@ public class ExploreFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         events = new ArrayList<Event>();
         adapter = new ExploreAdapter(getContext(), events);
 
@@ -83,24 +86,30 @@ public class ExploreFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { //taking in what user is entering in search bar
                 @Override
                 public boolean onQueryTextSubmit(String s) {
-                    String str = s;
+                    if(s.equals("")){
+                        return true;
+                    }
                     search(s);
-//                    events = results;
-//                    adapter.notifyDataSetChanged();
-                    return false;
+                    searchView.clearFocus();
+                    return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String s) {
+                    if(s.equals("")){
+                        searchView.clearFocus();
+                    }
                     return true;
                 }
             });
+
 
 
         db.collection("Events").orderBy("cost", Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
                         if(error!=null){
                             Log.e("Firestore error ", error.getMessage());
                         }
@@ -121,17 +130,20 @@ public class ExploreFragment extends Fragment {
         return root;
     }
 
-    private ArrayList<Event> search(String str){
+    private void search(String str){
+        if(str.equals("")){
+            getActivity().recreate();
+        }
         if(events != null) {
-            for (Event object : events) { //DATA IS NULL SO NEED TO MAKE SURE ACCESEING RIGHT SPOT IN DATABASE
-                if (object.getName().toLowerCase().contains(str.toLowerCase())) { //description matches what was entered
-                    results.add(object);
+            for (Iterator<Event> iterator = events.iterator(); iterator.hasNext(); ) {
+                Event event = iterator.next();
+                if (!(event.getName().toLowerCase().contains(str.toLowerCase())  || event.getCategory().toLowerCase().contains(str.toLowerCase()) || event.getSponsor().toLowerCase().contains(str.toLowerCase()) || event.getLocation().toLowerCase().contains(str.toLowerCase()))){ //description matches what was entered
+                    iterator.remove();
                 }
             }
         }
-        return results;
-//        ExploreAdapter exploreAdapter = new ExploreAdapter(getContext(), results);
-//        recyclerView.setAdapter(exploreAdapter);
+        adapter.notifyDataSetChanged();
+
     }
 
 
