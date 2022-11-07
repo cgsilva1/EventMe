@@ -26,6 +26,7 @@ public class MapFragment extends Fragment {
 
 //        final TextView textView = binding.textMap;
 //        mapViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
         return root;
     }
 
