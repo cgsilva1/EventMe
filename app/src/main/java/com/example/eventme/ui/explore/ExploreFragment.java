@@ -60,35 +60,6 @@ public class ExploreFragment extends Fragment {
         ref = FirebaseDatabase.getInstance().getReference();
         recyclerView = root.findViewById(R.id.rv);
 
-       // manager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        searchView = root.findViewById(R.id.searchView);
-
-        final androidx.appcompat.widget.SearchView searchView = binding.searchView;
-       // exploreViewModel.getText().observe(getViewLifecycleOwner(), searchView::setText);
-        return root;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(ref != null){
-            ref.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()){
-                        data = new ArrayList<>();
-//                        for(DataSnapshot ds : dataSnapshot.getChildren()){
-//                            data.add(ds.getValue(Event.class)); //adding data to array list from firebase
-//                        }
-
-                        adapterClass = new ExploreAdapter(data);
-                        recyclerView.setAdapter(adapterClass);
-                    }
-                }
-
         // To display the Recycler view linearly
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -100,25 +71,25 @@ public class ExploreFragment extends Fragment {
         data.add(new Event("name4", "cat4", "11/09/2001", "loc4", "7:00", 5, "sponsor4", "desc4", 10));
         //for loop through events in firebase add it to data array list and then display
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot ds : snapshot.getChildren()){ //looping through events in firebase and adding it to arraylist
-                    Event eventInfo = new Event();
-                    eventInfo.name = ds.child("name").getValue().toString();
-                    data.add(eventInfo);
-
-                    Toast.makeText(getActivity(), "Success retrieving data", Toast.LENGTH_SHORT).show();
-                }
-                adapter.setCard(data);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getActivity(), "Error retrieving data", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for(DataSnapshot ds : snapshot.getChildren()){ //looping through events in firebase and adding it to arraylist
+//                    Event eventInfo = new Event();
+//                    eventInfo.name = ds.child("name").getValue().toString();
+//                    data.add(eventInfo);
+//
+//                    Toast.makeText(getActivity(), "Success retrieving data", Toast.LENGTH_SHORT).show();
+//                }
+//                adapter.setCard(data);
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Toast.makeText(getActivity(), "Error retrieving data", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         adapter = new ExploreAdapter(getContext(), data);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
