@@ -6,6 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +58,10 @@ public class ExploreFragment extends Fragment {
     SearchView searchView;
     ExploreAdapter adapter;
     private FragmentExploreBinding binding;
+    private RadioGroup radioGroup;
+    private RadioButton radioButton;
+    private Button btnDisplay;
+
     FirebaseDatabase firebaseDatabase;
     //DatabaseReference dbRef = firebaseDatabase.getReference("Event");
     ArrayList<Event> events;
@@ -79,6 +87,31 @@ public class ExploreFragment extends Fragment {
         events = new ArrayList<Event>();
         adapter = new ExploreAdapter(getContext(), events);
 
+        radioGroup = root.findViewById(R.id.radioGroup);
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+//                radioButton = (RadioButton) root.findViewById(checkedId);
+//                Toast.makeText(getContext(), radioButton.getText(), Toast.LENGTH_SHORT).show();
+                switch(checkedId){
+                    case R.id.costRBtn:
+                        // do operations specific to this selection
+                        break;
+                    case R.id.distRBtn:
+                        // do operations specific to this selection
+                        break;
+                    case R.id.dateRBtn:
+                        // do operations specific to this selection
+                        break;
+                    case R.id.alphRBtn:
+                        // do operations specific to this selection
+                        break;
+                }
+            }
+        });
+
+        Spinner spinnerCats = root.findViewById(R.id.spinner_categories);
+        //need to create adapter to display categories in strings.xml
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { //taking in what user is entering in search bar
                 @Override
