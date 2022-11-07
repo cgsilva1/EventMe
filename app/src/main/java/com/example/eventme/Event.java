@@ -12,11 +12,13 @@ public class Event {
     private String sponsor;
     private String description;
     private int peopleRegistered;
+    private double latitude;
+    private double longitude;
 
     public Event() {
     }
 
-    public Event(String name, String category, String date, String location, String time, double cost, String sponsor, String description, int peopleRegistered) {
+    public Event(String name, String category, String date, String location, String time, double cost, String sponsor, String description, int peopleRegistered, double latitude, double longitude) {
         this.name = name;
         this.category = category;
         this.date = date;
@@ -26,6 +28,8 @@ public class Event {
         this.sponsor = sponsor;
         this.description = description;
         this.peopleRegistered = peopleRegistered;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
 
@@ -101,7 +105,19 @@ public class Event {
         this.peopleRegistered = peopleRegistered;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
 
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
 
+    public double getLongitude() {
+        return longitude;
+    }
 
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
 }
