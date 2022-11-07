@@ -64,7 +64,6 @@ public class ExploreFragment extends Fragment {
         binding = FragmentExploreBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        ref = FirebaseDatabase.getInstance().getReference();
         recyclerView = root.findViewById(R.id.rv);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
