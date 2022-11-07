@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:checked="false"
-            android:text="range of dates"
+            android:text="soonest"
             android:scaleX="0.55"
             android:scaleY="0.55"
             android:textAlignment="center"

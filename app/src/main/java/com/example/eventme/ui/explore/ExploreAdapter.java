@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -97,6 +98,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
         holder.loc.setText(event.getLocation());
         holder.cost.setText("$"+event.getCost() + "0");
         holder.date.setText(event.getDate());
+//        holder.date.setText(event.getDate().toString());
         holder.time.setText(event.getTime());
 
     }

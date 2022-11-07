@@ -76,7 +76,7 @@ public class ExploreFragment extends Fragment {
     ArrayList<Event> events;
     FirebaseFirestore db;
     String[] nums = new String[]{ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
-
+    String sort_by;
     String eventID;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -100,25 +100,25 @@ public class ExploreFragment extends Fragment {
         adapter = new ExploreAdapter(getContext(), shown_events);
 
         radioGroup = root.findViewById(R.id.radioGroup);
+        sort_by = "cost";
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-//               radioButton = (RadioButton) root.findViewById(checkedId);
-//               Toast.makeText(getContext(), radioButton.getText(), Toast.LENGTH_SHORT).show();
-                switch(checkedId){
-                    case R.id.costRBtn:
-                        // do operations specific to this selection
-                        break;
-                    case R.id.distRBtn:
-                        // do operations specific to this selection
-                        break;
-                    case R.id.dateRBtn:
-                        // do operations specific to this selection
-                        break;
-                    case R.id.alphRBtn:
-                        // do operations specific to this selection
-                        break;
+            
+                radioButton = (RadioButton) root.findViewById(checkedId);
+                Toast.makeText(getContext(), radioButton.getText(), Toast.LENGTH_SHORT).show();
+                CharSequence text = radioButton.getText();
+                if ("low to high".equals(text)) {// do operations specific to this selection
+                    sort_by = "cost";
+                } else if ("closest to farthest".equals(text)) {// do operations specific to this selection
+                    sort_by = "distance";
+                } else if ("soonest".equals(text)) {// do operations specific to this selection
+                    sort_by = "dates";
+                } else if ("a to z".equals(text)) {// do operations specific to this selection
+                    sort_by = "alpha";
                 }
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -173,7 +173,7 @@ public class ExploreFragment extends Fragment {
                         return true;
                     }
                     search(s);
-                    sortBy("distance");
+                    sortBy(sort_by);
                     adapter.notifyDataSetChanged();
                     searchView.clearFocus();
                     return true;
@@ -183,7 +183,7 @@ public class ExploreFragment extends Fragment {
                 public boolean onQueryTextChange(String s) {
                     if(s.equals("")){
                         resetList();
-                        sortBy("distance");
+                        sortBy(sort_by);
                         adapter.notifyDataSetChanged();
                         searchView.clearFocus();
                     }
@@ -203,12 +203,13 @@ public class ExploreFragment extends Fragment {
                         for(DocumentChange dc: value.getDocumentChanges()){
                             if(dc.getType()==DocumentChange.Type.ADDED){
                                 Event event = dc.getDocument().toObject(Event.class);
+                                String date = event.getDate().toString();
                                 shown_events.add(event);
                                 events.add(event);
 
                             }
                         }
-                        sortBy("distance");
+                        sortBy(sort_by);
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -287,9 +288,7 @@ public class ExploreFragment extends Fragment {
 
         }
         else if(sorter.equals("dates")){
-
-
-
+            Collections.sort(shown_events, Comparator.comparing(Event::getWhen));
 
         }
         else if(sorter.equals("alpha")){
