@@ -1,5 +1,6 @@
 package com.example.eventme.ui.profile;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,8 +22,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.eventme.User;
+import com.example.eventme.databinding.FragmentExploreBinding;
 import com.example.eventme.ui.explore.ExploreAdapter;
 import com.example.eventme.ui.explore.ExploreFragment;
 import com.example.eventme.ui.register.Register;
@@ -67,6 +71,12 @@ public class ProfileFragment extends Fragment {
     String udob;
     String userId;
 
+    //for recycler view of registered events events
+    RecyclerView recyclerView;
+    ExploreAdapter adapter;
+    ArrayList<Event> data;
+    ArrayList<Event> events;
+
     private FragmentProfileBinding binding;
     FirebaseAuth mAuth;
     FirebaseFirestore fStore;
@@ -84,21 +94,6 @@ public class ProfileFragment extends Fragment {
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        DocumentReference docRef = db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
-//                docRef.get().addOnCompleteListener(task -> {
-//                    if(task.isSuccessful() && task.getResult() != null){
-//                        dbName = task.getResult().getString("name");
-//                        dbDob = task.getResult().getString("birthday");
-//                        //other stuff
-//                    }else{
-//                        //deal with error
-//                    }
-//                });
-
-
-
 
 
         //display info for profile WHEN LOGGED IN
@@ -122,6 +117,9 @@ public class ProfileFragment extends Fragment {
         createAccountButton = root.findViewById(R.id.createAccountButton);
 
         mAuth = FirebaseAuth.getInstance();
+
+        //RECYCLER VIEW OF REGISTERED EVENTS
+        recyclerView = root.findViewById(R.id.rvProfile);
 
 
         if(loggedIn()){ //if user is logged in show profile infomration & log out button
@@ -149,12 +147,34 @@ public class ProfileFragment extends Fragment {
                     name_tv.setText(name);
                     String dob = value.getData().get("birthday").toString();
                     dob_tv.setText(dob);
-
-
-
                 }
             });
+            Activity activity = getActivity();
+            LinearLayoutManager lm = new LinearLayoutManager(activity);
+            recyclerView.setLayoutManager(lm);
+            events = new ArrayList<Event>();
+            adapter = new ExploreAdapter(getContext(), events);
 
+            db.collection("Events").orderBy("cost", Query.Direction.ASCENDING)
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                            if(error!=null){
+                                Log.e("Firestore error ", error.getMessage());
+                            }
+                            for(DocumentChange dc: value.getDocumentChanges()){
+                                if(dc.getType()==DocumentChange.Type.ADDED){
+                                    events.add(dc.getDocument().toObject(Event.class));
+
+                                }
+                            }
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.setAdapter(adapter);
 
 
 
@@ -199,6 +219,7 @@ public class ProfileFragment extends Fragment {
             dob_tv.setVisibility(View.GONE);
             uploadPhotoButton.setVisibility(View.GONE);
             signOut.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
 
             //LOGIN BUTTON ONCLICK
             loginButton.setOnClickListener(new View.OnClickListener() {
