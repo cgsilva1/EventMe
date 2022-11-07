@@ -19,22 +19,6 @@
         android:background="@color/white">
 
         <TextView
-            android:id="@+id/address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="45dp"
-            android:padding="10dp"
-            android:text="sample location"
-            />
-
-        <TextView
-            android:id="@+id/category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_marginTop="83dp"
-            android:text="sample category" />
-        <TextView
             android:id="@+id/eventName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,13 +29,61 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:padding="5dp"
+            android:text="sample location"
+            />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="74dp"
+            android:padding="5dp"
+            android:text="sample date"
+            />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_marginTop="74dp"
+            android:text="00:00"
+            android:layout_marginRight="200dp"
+            android:layout_alignRight="@id/date"
+            android:layout_alignBottom="@id/date"/>
+
+        <TextView
+            android:id="@+id/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_marginTop="103dp"
+            android:text="sample category" />
+
+        <TextView
+            android:id="@+id/cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="$cost"
+            android:layout_marginRight="10dp"
+            android:layout_alignRight="@id/eventName"
+            android:layout_alignBottom="@id/eventName"/>
+
+
         <Button
             android:id="@+id/eventRegisterBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Register"
             android:layout_marginRight="10dp"
-            android:layout_alignTop="@id/category"
+            android:layout_alignTop="@id/date"
             android:layout_alignRight="@id/category"/>
 
     </RelativeLayout>
