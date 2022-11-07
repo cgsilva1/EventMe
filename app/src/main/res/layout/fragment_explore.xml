@@ -23,7 +23,6 @@
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="fill_parent"
@@ -35,6 +34,74 @@
         app:defaultQueryHint="@string/search_hint"
         />
 
+    <!--displaying a radio group on below line-->
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <!--adding a radio button -->
+        <RadioButton
+            android:id="@+id/costRBtn"
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="true"
+            android:text="low to high"
+            android:textAlignment="center"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:buttonTint="@color/black"
+            android:textSize="20sp" />
+
+        <!--adding a radio button -->
+        <RadioButton
+            android:id="@+id/distRBtn"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:text="lowest to farthest"
+            android:textAlignment="center"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:buttonTint="@color/black"
+            android:textSize="20sp" />
+
+        <!--adding a radio button -->
+        <RadioButton
+            android:id="@+id/dateRBtn"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:text="range of dates"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:textAlignment="center"
+            android:buttonTint="@color/black"
+            android:textSize="20sp" />
+
+        <!--adding a radio button -->
+        <RadioButton
+            android:id="@+id/alphRBtn"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:checked="false"
+            android:text="a to z"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:textAlignment="center"
+            android:buttonTint="@color/black"
+            android:textSize="20sp" />
+
+    </RadioGroup>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv"
         android:layout_width="match_parent"
@@ -43,6 +110,7 @@
         android:background="@color/teal_200"
         android:paddingBottom="50dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
 
 
 </LinearLayout>

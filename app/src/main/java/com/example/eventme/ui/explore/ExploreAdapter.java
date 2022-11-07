@@ -92,6 +92,9 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
         holder.name.setText(event.getName());
         holder.cat.setText(event.getCategory());
         holder.loc.setText(event.getLocation());
+        holder.cost.setText("$"+event.getCost() + "0");
+        holder.date.setText(event.getDate());
+        holder.time.setText(event.getTime());
     }
 
     @Override
@@ -103,6 +106,9 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
         TextView name;
         TextView cat;
         TextView loc;
+        TextView cost;
+        TextView date;
+        TextView time;
 
         //CardView cardView;
         //need to add other parameters of event
@@ -112,6 +118,9 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
             name = itemView.findViewById(R.id.eventName);
             cat = itemView.findViewById(R.id.category);
             loc = itemView.findViewById(R.id.address);
+            cost = itemView.findViewById(R.id.cost);
+            date = itemView.findViewById(R.id.date);
+            time = itemView.findViewById(R.id.time);
             //cardView = itemView.findViewById(R.id.card_view);
 
         }
