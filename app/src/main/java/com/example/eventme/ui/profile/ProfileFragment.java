@@ -164,11 +164,31 @@ public class ProfileFragment extends Fragment {
                             }
                             for(DocumentChange dc: value.getDocumentChanges()){
                                 if(dc.getType()==DocumentChange.Type.ADDED){
-                                    events.add(dc.getDocument().toObject(Event.class));
+
+                                    DocumentReference dRef = FirebaseFirestore.getInstance().collection("User")
+                                            .document(mAuth.getCurrentUser().getUid());
+                                    Task<DocumentSnapshot> task = dRef.get();
+                                    task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            String data = task.getResult().getData().toString();
+                                             ArrayList<String> reservations = (ArrayList<String>) task.getResult().getData().get("Reservations");
+                                             Event event = dc.getDocument().toObject(Event.class);
+                                             for(String s: reservations) {
+                                                 String eventName = event.getName();
+                                                 if(s.equals(eventName)) {
+                                                     events.add(event);
+                                                 }
+                                             }
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    });
+
+
 
                                 }
                             }
-                            adapter.notifyDataSetChanged();
+
                         }
                     });
 
