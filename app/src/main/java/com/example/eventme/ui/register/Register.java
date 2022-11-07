@@ -37,6 +37,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -161,9 +162,11 @@ public class Register extends AppCompatActivity {
                             //store the data in the document --> hash map
                             Map<String, Object> user = new HashMap<String, Object>();
                             // insert data into map using put
+                            ArrayList<String> Reservations = new ArrayList<>();
                             user.put("name", name);
                             user.put("email", email);
                             user.put("birthday", dob);
+                            user.put("Reservations", Reservations);
                             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task1 -> {
                                 Toast.makeText(Register.this, "ENTER!", Toast.LENGTH_SHORT).show();
                                 if (!task1.isSuccessful()) {

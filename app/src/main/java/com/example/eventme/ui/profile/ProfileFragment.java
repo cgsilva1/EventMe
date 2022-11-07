@@ -65,6 +65,7 @@ public class ProfileFragment extends Fragment {
     Button signOut;
     ImageView profilePic;
     ImageView logo;
+    Button regBtn;
     String dbName;
     String dbDob;
     String uname;
@@ -120,6 +121,8 @@ public class ProfileFragment extends Fragment {
 
         //RECYCLER VIEW OF REGISTERED EVENTS
         recyclerView = root.findViewById(R.id.rvProfile);
+        regBtn = root.findViewById(R.id.eventRegisterBtn);
+//        regBtn.setText("unregister");
 
 
         if(loggedIn()){ //if user is logged in show profile infomration & log out button
@@ -164,11 +167,31 @@ public class ProfileFragment extends Fragment {
                             }
                             for(DocumentChange dc: value.getDocumentChanges()){
                                 if(dc.getType()==DocumentChange.Type.ADDED){
-                                    events.add(dc.getDocument().toObject(Event.class));
+
+                                    DocumentReference dRef = FirebaseFirestore.getInstance().collection("User")
+                                            .document(mAuth.getCurrentUser().getUid());
+                                    Task<DocumentSnapshot> task = dRef.get();
+                                    task.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            String data = task.getResult().getData().toString();
+                                             ArrayList<String> reservations = (ArrayList<String>) task.getResult().getData().get("Reservations");
+                                             Event event = dc.getDocument().toObject(Event.class);
+                                             for(String s: reservations) {
+                                                 String eventName = event.getName();
+                                                 if(s.equals(eventName)) {
+                                                     events.add(event);
+                                                 }
+                                             }
+                                            adapter.notifyDataSetChanged();
+                                        }
+                                    });
+
+
 
                                 }
                             }
-                            adapter.notifyDataSetChanged();
+
                         }
                     });
 
@@ -265,6 +288,7 @@ public class ProfileFragment extends Fragment {
         // this intent returns the image that the user has clicked on to select
         Intent openGalleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
          startActivityForResult(openGalleryIntent, 1000);
+
     }
 
     public void sendSignOut(){
