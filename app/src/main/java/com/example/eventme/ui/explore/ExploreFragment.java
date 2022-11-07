@@ -67,7 +67,6 @@ public class ExploreFragment extends Fragment {
         ref = FirebaseDatabase.getInstance().getReference();
         recyclerView = root.findViewById(R.id.rv);
 
-       // manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         FirebaseRecyclerOptions<Event> options = new FirebaseRecyclerOptions.Builder<Event>().setQuery(ref, Event.class).build();

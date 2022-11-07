@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     protected boolean authenticate(String email, String password){
         AtomicBoolean success= new AtomicBoolean(false);
+        Toast.makeText(LoginActivity.this, "Attempt at auth!", Toast.LENGTH_SHORT).show();
         fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if(task.isSuccessful())
             {

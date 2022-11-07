@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -19,14 +20,20 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.eventme.User;
 import com.example.eventme.ui.explore.ExploreAdapter;
 import com.example.eventme.ui.explore.ExploreFragment;
 import com.example.eventme.ui.register.Register;
 import com.example.eventme.databinding.FragmentProfileBinding;
 import com.example.eventme.ui.login.LoginActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -47,6 +54,8 @@ public class ProfileFragment extends Fragment {
     Button signOut;
     ImageView profilePic;
     ImageView logo;
+    String dbName;
+    String dbDob;
     String uname;
     String udob;
     String userId;
@@ -69,10 +78,29 @@ public class ProfileFragment extends Fragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        DocumentReference docRef = db.collection("User").document(FirebaseAuth.getInstance().getCurrentUser().getUid());
+//                docRef.get().addOnCompleteListener(task -> {
+//                    if(task.isSuccessful() && task.getResult() != null){
+//                        dbName = task.getResult().getString("name");
+//                        dbDob = task.getResult().getString("birthday");
+//                        //other stuff
+//                    }else{
+//                        //deal with error
+//                    }
+//                });
+
+
+
+
+
         //display info for profile WHEN LOGGED IN
         profileImage = root.findViewById(R.id.profile_image);
         name = root.findViewById(R.id.name_profile);
+        //name.setText(dbName);
         dob = root.findViewById(R.id.dob_profile);
+        //dob.setHint(dbDob);
+
         //upload profile picture button
         uploadPhotoButton = root.findViewById(R.id.uploadPhotoBtn);
         //sign out button
@@ -89,6 +117,7 @@ public class ProfileFragment extends Fragment {
         //create account button
         createAccountButton = root.findViewById(R.id.createAccountButton);
 
+
         if(loggedIn()){ //if user is logged in show profile infomration & log out button
 
             promptA.setVisibility(View.GONE);
@@ -99,6 +128,7 @@ public class ProfileFragment extends Fragment {
             mAuth = FirebaseAuth.getInstance();
             fStore = FirebaseFirestore.getInstance();
             storageReference = FirebaseStorage.getInstance().getReference();
+
 //            final StorageReference profileReference = storageReference.child("Users/"+ Objects.requireNonNull(mAuth.getCurrentUser()).getUid()+"/profile.jpg");
 //            profileReference.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(profileImage));
 
