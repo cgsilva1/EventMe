@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/blue_200"
     tools:context=".ui.explore.ExploreFragment">
 
 
@@ -38,7 +37,7 @@
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="fill_parent"
-        android:layout_height="30dp"
+        android:layout_height="49dp"
         android:layout_centerInParent="true"
         android:orientation="horizontal"
         android:layout_gravity="center"
@@ -53,8 +52,8 @@
             android:checked="true"
             android:text="low to high"
             android:textAlignment="center"
-            android:scaleX="0.5"
-            android:scaleY="0.5"
+            android:scaleX="0.55"
+            android:scaleY="0.55"
             android:buttonTint="@color/black"
             android:textSize="20sp" />
 
@@ -65,10 +64,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:checked="false"
-            android:text="lowest to farthest"
+            android:text="closest to farthest"
             android:textAlignment="center"
-            android:scaleX="0.5"
-            android:scaleY="0.5"
+            android:scaleX="0.55"
+            android:scaleY="0.55"
             android:buttonTint="@color/black"
             android:textSize="20sp" />
 
@@ -80,8 +79,8 @@
             android:layout_gravity="center"
             android:checked="false"
             android:text="range of dates"
-            android:scaleX="0.5"
-            android:scaleY="0.5"
+            android:scaleX="0.55"
+            android:scaleY="0.55"
             android:textAlignment="center"
             android:buttonTint="@color/black"
             android:textSize="20sp" />
@@ -94,8 +93,8 @@
             android:layout_gravity="center"
             android:checked="false"
             android:text="a to z"
-            android:scaleX="0.5"
-            android:scaleY="0.5"
+            android:scaleX="0.55"
+            android:scaleY="0.55"
             android:textAlignment="center"
             android:buttonTint="@color/black"
             android:textSize="20sp" />
@@ -107,7 +106,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
-        android:background="@color/teal_200"
         android:paddingBottom="50dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
