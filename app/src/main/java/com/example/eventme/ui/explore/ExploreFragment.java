@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -66,6 +68,8 @@ public class ExploreFragment extends Fragment {
     private RadioButton radioButton;
     private Button btnDisplay;
 
+    Spinner dropdown;
+
     FirebaseDatabase firebaseDatabase;
     //DatabaseReference dbRef = firebaseDatabase.getReference("Event");
     ArrayList<Event> shown_events;
@@ -99,8 +103,8 @@ public class ExploreFragment extends Fragment {
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-//                radioButton = (RadioButton) root.findViewById(checkedId);
-//                Toast.makeText(getContext(), radioButton.getText(), Toast.LENGTH_SHORT).show();
+//               radioButton = (RadioButton) root.findViewById(checkedId);
+//               Toast.makeText(getContext(), radioButton.getText(), Toast.LENGTH_SHORT).show();
                 switch(checkedId){
                     case R.id.costRBtn:
                         // do operations specific to this selection
@@ -118,7 +122,47 @@ public class ExploreFragment extends Fragment {
             }
         });
 
-        Spinner spinnerCats = root.findViewById(R.id.spinner_categories);
+        dropdown = root.findViewById(R.id.spinner_categories);
+        String[] items = new String[] { "None", "Sports", "Music", "Food", "Movies", "Health"};
+        ArrayAdapter<String> adapterDropDown = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, items);
+        dropdown.setAdapter(adapterDropDown);
+
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("item", (String) parent.getItemAtPosition(position));
+                String s = parent.getItemAtPosition(position).toString();
+//                Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+                switch(s){
+                    case "None":
+                        // do operations specific to this selection
+                        Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show(); //this is just for testing that it properly reads the string input
+                        break;
+                    case "Sports":
+                        // do operations specific to this selection
+                        break;
+                    case "Music":
+                        // do operations specific to this selection
+                        break;
+                    case "Food":
+                        // do operations specific to this selection
+                        break;
+                    case "Movies":
+                        // do operations specific to this selection
+                        break;
+                    case "Health":
+                        // do operations specific to this selection
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+
+            }
+        });
         //need to create adapter to display categories in strings.xml
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() { //taking in what user is entering in search bar

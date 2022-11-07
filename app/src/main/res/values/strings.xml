@@ -38,7 +38,7 @@
     <string name="register_failed">"Register failed"</string>
 
     //SPINNER
-    <string-array name="languages">
+    <string-array name="items">
         <item>Sports</item>
         <item>Music</item>
         <item>Food</item>
