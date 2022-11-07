@@ -165,6 +165,7 @@ public class Register extends AppCompatActivity {
                             user.put("email", email);
                             user.put("birthday", dob);
                             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task1 -> {
+                                Toast.makeText(Register.this, "ENTER!", Toast.LENGTH_SHORT).show();
                                 if (!task1.isSuccessful()) {
                                     Log.d("TAG", "Failed to create user" + userID);
                                     return;
@@ -181,7 +182,6 @@ public class Register extends AppCompatActivity {
                                 });
                                 startActivity(new Intent(Register.this, MainActivity.class));
                             });
-
                         }
 
                         else
@@ -191,8 +191,6 @@ public class Register extends AppCompatActivity {
 
                             startActivity(new Intent(Register.this, LoginActivity.class));
                         }
-
-
                     }
                 });
 
