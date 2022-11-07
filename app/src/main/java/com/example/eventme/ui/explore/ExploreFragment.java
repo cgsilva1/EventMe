@@ -78,6 +78,7 @@ public class ExploreFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+
         db = FirebaseFirestore.getInstance();
         events = new ArrayList<Event>();
         adapter = new ExploreAdapter(getContext(), events);
