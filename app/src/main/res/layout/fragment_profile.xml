@@ -31,8 +31,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:hint="@string/name_profile"
         android:layout_centerInParent="true"
+        android:text="namee"
         android:textAlignment="center"
         android:textSize="35sp"
         android:textStyle="bold" />
