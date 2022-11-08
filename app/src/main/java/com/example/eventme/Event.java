@@ -66,6 +66,7 @@ public class Event {
         return when;
     }
 
+
     public void setDate(String strdate){
         this.date = strdate;
         String[] strTime = time.split(" ");
