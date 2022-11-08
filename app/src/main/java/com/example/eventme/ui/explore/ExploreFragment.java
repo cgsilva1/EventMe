@@ -156,7 +156,6 @@ public class ExploreFragment extends Fragment {
                     return true;
                 }
                 search(s);
-                sortBy(sort_by);
                 adapter.notifyDataSetChanged();
                 searchView.clearFocus();
                 return true;
@@ -166,6 +165,7 @@ public class ExploreFragment extends Fragment {
             public boolean onQueryTextChange(String s) {
                 if (s.equals("")) {
                     resetList();
+                    if(!category_result.equals("None"))  search(category_result);
                     sortBy(sort_by);
                     adapter.notifyDataSetChanged();
                     searchView.clearFocus();
@@ -211,6 +211,7 @@ public class ExploreFragment extends Fragment {
                     iterator.remove();
                 }
             }
+            sortBy(sort_by);
         }
 
     }

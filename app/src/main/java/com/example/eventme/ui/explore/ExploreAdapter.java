@@ -62,6 +62,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
 
                 if(mAuth.getCurrentUser()==null){
                     context.startActivity(new Intent(context, LoginActivity.class));
+                    return;
                 }
 
                 TextView eventName = big_view.findViewById(R.id.eventName);

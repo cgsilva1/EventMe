@@ -24,10 +24,11 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:text="sample Name"
-            android:onClick="eventDetails"
-            android:clickable="true"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <!--            android:onClick="eventDetails"-->
+<!--            android:clickable="true"-->
 
         <TextView
             android:id="@+id/address"
