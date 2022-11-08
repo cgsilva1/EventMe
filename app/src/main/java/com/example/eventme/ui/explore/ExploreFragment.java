@@ -134,7 +134,6 @@ public class ExploreFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.v("item", (String) parent.getItemAtPosition(position));
                 String category = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getContext(), category, Toast.LENGTH_SHORT).show();
                 category_result = category;
                 resetList();
                 if(!category_result.equals("None"))  search(category_result);
