@@ -1,10 +1,16 @@
 package com.example.eventme;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class Event {
     public String name;
     private String category;
+    private Date when;
     private String date;
     private String location;
     private String time;
@@ -18,10 +24,31 @@ public class Event {
     public Event() {
     }
 
-    public Event(String name, String category, String date, String location, String time, double cost, String sponsor, String description, int peopleRegistered, double latitude, double longitude) {
+    public Event(String name, String category, String strdate, String location, String time, double cost, String sponsor, String description, int peopleRegistered, double latitude, double longitude) {
         this.name = name;
         this.category = category;
-        this.date = date;
+        this.date = strdate;
+
+        String[] strTime = time.split(" ");
+        //get the hour value
+        Integer hour = Integer.parseInt(strTime[0].split(":")[0]);
+
+        //if PM add to the military time
+        if(strTime[1].equals("PM")){
+            hour+=12;
+            strTime[0] = hour +":"+ strTime[0].split(":")[1];
+        }
+
+        strdate+=(":"+strTime[0]);
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy:H:mm", Locale.ENGLISH);
+        Date _date = null;
+        try {
+            _date = formatter.parse(strdate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.when = _date;
+
         this.location = location;
         this.time = time;
         this.cost = cost;
@@ -32,6 +59,35 @@ public class Event {
         this.longitude = longitude;
     }
 
+    public String getDate(){
+        return date;
+    }
+    public Date getWhen(){
+        return when;
+    }
+
+
+    public void setDate(String strdate){
+        this.date = strdate;
+        String[] strTime = time.split(" ");
+        //get the hour value
+        Integer hour = Integer.parseInt(strTime[0].split(":")[0]);
+
+        //if PM add to the military time
+        if(strTime[1].equals("PM")){
+            hour+=12;
+            strTime[0] = hour +":"+ strTime[0].split(":")[1];
+        }
+        strdate+=(":"+strTime[0]);
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy:H:mm", Locale.ENGLISH);
+        Date _date = null;
+        try {
+            _date = formatter.parse(strdate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.when = _date;
+    }
 
     public String getName() {
         return name;
@@ -49,13 +105,6 @@ public class Event {
         this.category = category;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
 
     public String getLocation() {
         return location;

@@ -1,4 +1,4 @@
-package com.example.eventme.ui.explore;
+package com.example.eventme.ui.profile;
 
 import android.content.Context;
 import android.content.Intent;
@@ -36,33 +36,34 @@ import java.util.Objects;
 
 import javax.xml.transform.Source;
 
-public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
+public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHolder> {
     private Context context;
     SearchView searchView;
     User user;
     ArrayList<Event> data;
     RecyclerView recyclerView;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    ProfileAdapter THIS = this;
 
     String date;
     //Constructor
-    public ExploreAdapter(Context context, ArrayList<Event> data){
+    public ProfileAdapter(Context context, ArrayList<Event> data){
         this.context = context;
         this.data = data;
     }
 
     @NonNull
     @Override
-    public ExploreAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+    public ProfileAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View big_view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_holder, viewGroup, false);
         Button btn = big_view.findViewById(R.id.eventRegisterBtn);
+        btn.setText("Unregister");
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 if(mAuth.getCurrentUser()==null){
                     context.startActivity(new Intent(context, LoginActivity.class));
-                    return;
                 }
 
                 TextView eventName = big_view.findViewById(R.id.eventName);
@@ -72,10 +73,10 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
                         DocumentReference dRef = FirebaseFirestore.getInstance().collection("User")
                                 .document(mAuth.getCurrentUser().getUid());
 
-                        //TODO: make sure you can't register for multiple of the same event
-                        //TODO: check times to?
-                        dRef.update("Reservations", FieldValue.arrayUnion(eventName.getText()));
-                        Toast.makeText(context, "Successfully Registered for "+eventName.getText(), Toast.LENGTH_SHORT).show();
+                        dRef.update("Reservations", FieldValue.arrayRemove(eventName.getText()));
+                        delete(getEvent((String)eventName.getText()));
+                        THIS.notifyDataSetChanged();
+
 
                     }
                 }
@@ -83,22 +84,19 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
         });
 
         //view = inflater.inflate(R.layout.card_holder, viewGroup, false);
-        return new ExploreAdapter.MyViewHolder(big_view);
+        return new ProfileAdapter.MyViewHolder(big_view);
     }
 //    public ExploreAdapter(Context context){
 //        this.context = context;
 //    }
 
     @Override
-    public void onBindViewHolder(@NonNull ExploreAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ProfileAdapter.MyViewHolder holder, int position) {
         Event event = data.get(position);
-//        holder.name.setText(model.getName());
-//        holder.desc.setText(model.getDescription());
         holder.name.setText(event.getName());
         holder.cat.setText(event.getCategory());
         holder.loc.setText(event.getLocation());
         holder.cost.setText("$"+event.getCost() + "0");
-//        holder.date.setText(event.getWhen().toString());
         holder.date.setText(event.getDate().toString());
         holder.time.setText(event.getTime());
 
@@ -157,7 +155,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
 
     public Event getEvent(@NonNull String name){
         for (Event e: data){
-            if (e.name.equals(name)) return e;
+            if (e.getName().equals(name)) return e;
         }
         return null;
     }
