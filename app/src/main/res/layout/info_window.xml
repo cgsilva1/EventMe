@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="134dp"
+        android:layout_height="174dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="106dp">
+
+        <TextView
+            android:id="@+id/eventName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="eventDetails"
+            android:padding="0dp"
+            android:text="sample Name"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:padding="3dp"
+            android:text="sample location" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:padding="3dp"
+            android:text="sample date" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/date"
+            android:layout_alignBottom="@id/date"
+            android:layout_marginTop="3dp"
+            android:padding="3dp"
+            android:text="00:00" />
+
+        <TextView
+            android:id="@+id/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:padding="3dp"
+            android:text="sample category" />
+
+        <TextView
+            android:id="@+id/cost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@id/eventName"
+            android:layout_alignBottom="@id/eventName"
+            android:padding="3dp"
+            android:text="$cost" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
