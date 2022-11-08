@@ -1,5 +1,7 @@
 package com.example.eventme.ui.explore;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -136,7 +138,8 @@ public class ExploreFragment extends Fragment {
                 String category = parent.getItemAtPosition(position).toString();
                 category_result = category;
                 resetList();
-                if(!category_result.equals("None"))  search(category_result);
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
                 adapter.notifyDataSetChanged();
             }
 
@@ -273,6 +276,8 @@ public class ExploreFragment extends Fragment {
 
 
     }
+
+
 
 
 }

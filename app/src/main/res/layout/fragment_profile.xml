@@ -145,6 +145,20 @@
         android:onClick="signOut"
         />
 
+    <TextView
+        android:id="@+id/upcoming"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerInParent="true"
+        android:hint="@string/upcomingEvents"
+        android:textSize="25sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/name_profile"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvProfile"
         android:layout_width="match_parent"

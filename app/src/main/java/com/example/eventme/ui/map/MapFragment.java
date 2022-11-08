@@ -63,8 +63,6 @@ public class MapFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
-
         //View view=inflater.inflate(R.layout.fragment_map, container, false);
         binding = FragmentMapBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -73,23 +71,24 @@ public class MapFragment extends Fragment {
         recyclerView = root.findViewById(R.id.rvMap);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-
         // Initialize map fragment
-        SupportMapFragment mapFragment = (SupportMapFragment)
+        SupportMapFragment mapFragment =(SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.mapAPI);
         // Async map
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
+                //Toast.makeText(MapFragment.this, "marker in sydney", Toast.LENGTH_SHORT).show();
 
                 LatLng usc = new LatLng(34.02241412645936, -118.28525647720889);
                 googleMap.addMarker(new MarkerOptions()
                         .position(usc)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                         .title("Current Location"));
+                //googleMap.moveCamera(CameraUpdateFactory.newLatLng(usc));
+                //googleMap.animateCamera( CameraUpdateFactory.zoomTo( 11.0f ) );
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usc,10));
 
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usc, 10));
-                //googleMap.setOnInfoWindowClickListener(this);
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 events = new ArrayList<Event>();
                 adapter = new ExploreAdapter(getContext(), events);
@@ -98,62 +97,54 @@ public class MapFragment extends Fragment {
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                if (error != null) {
+                                if(error!=null){
                                     Log.e("Firestore error ", error.getMessage());
                                 }
-                                for (DocumentChange dc : value.getDocumentChanges()) {
-                                    if (dc.getType() == DocumentChange.Type.ADDED) {
+                                for(DocumentChange dc: value.getDocumentChanges()){
+                                    if(dc.getType()==DocumentChange.Type.ADDED){
                                         Event event = dc.getDocument().toObject(Event.class);
 
                                         LatLng eventLoc = new LatLng(event.getLatitude(), event.getLongitude());
                                         MarkerOptions marker =new MarkerOptions()
                                                 .position(eventLoc)
+                                                .title(event.getName());
 
-                                                .title(event.getName()));
-                                        // Setting a custom info window adapter for the google map
-                                        InfoWindowAdapter markerInfoWindowAdapter = new InfoWindowAdapter(getContext(), event);
-                                        googleMap.setInfoWindowAdapter(markerInfoWindowAdapter);
+                                        googleMap.addMarker(marker);
 
-                                        
-                                        });
-
-                                        events.add(event);
-                                        Collections.sort(events, (E1, E2) -> {
-                                            double currLat = 34.02241412645936;
-                                            double currLong = -118.28525647720889;
-                                            double E1Lat = E1.getLatitude();
-                                            double E1Long = E1.getLongitude();
-                                            double E2Lat = E2.getLatitude();
-                                            double E2Long = E2.getLongitude();
-                                            double distanceE1 = Math.sqrt((currLat - E1Lat) * (currLat - E1Lat) + (currLong - E1Long) * (currLong - E1Long));
-                                            double distanceE2 = Math.sqrt((currLat - E2Lat) * (currLat - E2Lat) + (currLong - E2Long) * (currLong - E2Long));
-
-                                            double num = (distanceE2 - distanceE1);
-
-                                            if (num < 0) {
-                                                num = 1;
-                                            } else if (num > 0) {
-                                                num = -1;
-                                            } else {
-                                                num = 0;
-                                            }
-                                            return (int) num;
-                                        });
 
 
 
+                                        events.add(event);
 
                                     }
                                 }
+                                Collections.sort(events, (E1, E2) -> {
+                                    double currLat = 34.02241412645936;
+                                    double currLong = -118.28525647720889;
+                                    double E1Lat = E1.getLatitude();
+                                    double E1Long = E1.getLongitude();
+                                    double E2Lat = E2.getLatitude();
+                                    double E2Long = E2.getLongitude();
+                                    double distanceE1 = Math.sqrt((currLat - E1Lat) * (currLat - E1Lat) + (currLong - E1Long) * (currLong - E1Long));
+                                    double distanceE2 = Math.sqrt((currLat - E2Lat) * (currLat - E2Lat) + (currLong - E2Long) * (currLong - E2Long));
+
+                                    double num = (distanceE2 - distanceE1);
+
+                                    if (num < 0) {
+                                        num = 1;
+                                    } else if (num > 0) {
+                                        num = -1;
+                                    } else {
+                                        num = 0;
+                                    }
+                                    return (int) num;
+                                });
+                                InfoWindowAdapter markerInfoWindowAdapter = new InfoWindowAdapter(getContext(), events);
+                                googleMap.setInfoWindowAdapter(markerInfoWindowAdapter);
                                 adapter.notifyDataSetChanged();
 
                             }
                         });
-            }
-
-
-
-        });
 
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 recyclerView.setLayoutManager(linearLayoutManager);
@@ -161,10 +152,25 @@ public class MapFragment extends Fragment {
 
 
 
-                
-                    }
-                });
-
+                // When map is loaded
+                //googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                //@Override
+                //public void onMapClick(LatLng latLng) {
+                // When clicked on map
+                // Initialize marker options
+                //MarkerOptions markerOptions=new MarkerOptions();
+                // Set position of marker
+                //markerOptions.position(latLng);
+                // Set title of marker
+                //markerOptions.title(latLng.latitude+" : "+latLng.longitude);
+                // Remove all marker
+                //googleMap.clear();
+                // Animating to zoom the marker
+                //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                // Add marker on map
+                //googleMap.addMarker(markerOptions);
+            }
+        });
 
 
 
