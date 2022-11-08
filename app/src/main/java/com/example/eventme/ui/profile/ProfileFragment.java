@@ -74,7 +74,7 @@ public class ProfileFragment extends Fragment {
 
     //for recycler view of registered events events
     RecyclerView recyclerView;
-    ExploreAdapter adapter;
+    ProfileAdapter adapter;
     ArrayList<Event> data;
     ArrayList<Event> events;
 
@@ -156,7 +156,8 @@ public class ProfileFragment extends Fragment {
             LinearLayoutManager lm = new LinearLayoutManager(activity);
             recyclerView.setLayoutManager(lm);
             events = new ArrayList<Event>();
-            adapter = new ExploreAdapter(getContext(), events);
+            adapter = new ProfileAdapter(getContext(), events);
+
 
             db.collection("Events").orderBy("cost", Query.Direction.ASCENDING)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
