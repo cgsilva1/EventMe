@@ -1,16 +1,23 @@
 package com.example.eventme.ui.explore;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,11 +29,19 @@ import com.example.eventme.R;
 import com.example.eventme.User;
 import com.example.eventme.ui.login.LoginActivity;
 import com.example.eventme.ui.register.Register;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
@@ -36,7 +51,7 @@ import java.util.Objects;
 
 import javax.xml.transform.Source;
 
-import kotlinx.coroutines.scheduling.Task;
+
 
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
     private Context context;
@@ -45,6 +60,10 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
     ArrayList<Event> data;
     RecyclerView recyclerView;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    Event checkEvent;
+    DocumentReference dRef;
+
+
 
     String date;
     //Constructor
@@ -66,19 +85,24 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
                     context.startActivity(new Intent(context, LoginActivity.class));
                     return;
                 }
+                dRef = FirebaseFirestore.getInstance().collection("User")
+                        .document(mAuth.getCurrentUser().getUid());
 
                 TextView eventName = big_view.findViewById(R.id.eventName);
                 for(int i = 0; i<data.size(); i++){
                     if(data.get(i).getName()== eventName.getText()){
                         //register the user for this event
-                        DocumentReference dRef = FirebaseFirestore.getInstance().collection("User")
-                                .document(mAuth.getCurrentUser().getUid());
 
-                        //TODO: make sure you can't register for multiple of the same event
-                        //TODO: check times to?
+                        checkEvent = data.get(i);
+                        //TODO: check times that you can't register for conflicting events
+                        //if reservation doesn't conflict
+                        if(true) {
+                            dRef.update("Reservations", FieldValue.arrayUnion(eventName.getText()));
+                            Toast.makeText(context, "Successfully Registered for "+eventName.getText(), Toast.LENGTH_SHORT).show();
+                        }
+                        else{
 
-                        dRef.update("Reservations", FieldValue.arrayUnion(eventName.getText()));
-                        Toast.makeText(context, "Successfully Registered for "+eventName.getText(), Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 }
@@ -136,6 +160,26 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
             //cardView = itemView.findViewById(R.id.card_view);
 
         }
+    }
+
+    public void popUpMessage(Event registered, Event attempt){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        alertDialogBuilder.setTitle("Warning ");
+        alertDialogBuilder.setMessage("The event you are trying to register for, "+attempt.getName()+", conflicts with, "+registered.getName());
+        alertDialogBuilder.setPositiveButton("Register Anyway",new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dRef.update("Reservations", FieldValue.arrayUnion(attempt.getName()));
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Don't Register", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                return;
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     public void setCard(ArrayList<Event> data) {

@@ -148,12 +148,10 @@ public class Register extends AppCompatActivity {
                 }
 
                 //register user in firebase
-                Toast.makeText(Register.this, "Creating on complete listener", Toast.LENGTH_SHORT).show();
                 mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
-                        Toast.makeText(Register.this, "in the listener", Toast.LENGTH_SHORT).show();
                         if(task.isSuccessful())
                         {
                             Toast.makeText(Register.this, "Account Created, Welcome!", Toast.LENGTH_SHORT).show();
@@ -197,27 +195,7 @@ public class Register extends AppCompatActivity {
                     }
                 });
 
-
-
-
-
             }
-
-
-
-                //for testing fors up to here its redirect to login
-//                Intent intent = new Intent(Register.this, LoginActivity.class);
-//                startActivity(intent);
-
-//                Toast.makeText(Register.this, "Account Created, Welcome!", Toast.LENGTH_SHORT).show();
-//                databaseReference.push().setValue(new User(name, email, dob, password));
-//                Intent intent = new Intent(Register.this, MainActivity.class);
-//                startActivity(intent);
-
-//                //Call function to empty All EditText
-//                emptyInputEditText();
-
-
         });
     }
 

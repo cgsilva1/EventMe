@@ -26,13 +26,19 @@
         tools:layout_editor_absoluteX="-11dp">
 
     </fragment>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMap"
             android:layout_width="match_parent"
-            android:layout_height="608dp"
+            android:layout_height="650dp"
             android:layout_margin="5dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/rv"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:paddingBottom="50dp"-->
+<!--            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>-->
 </LinearLayout>
 </ScrollView>

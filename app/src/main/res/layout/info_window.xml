@@ -5,8 +5,8 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="134dp"
-        android:layout_height="174dp"
+        android:layout_width="90dp"
+        android:layout_height="94dp"
         android:background="@color/white"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="106dp">
@@ -19,24 +19,26 @@
             android:onClick="eventDetails"
             android:padding="0dp"
             android:text="sample Name"
-            android:textSize="20sp"
+            android:textSize="10sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:padding="3dp"
-            android:text="sample location" />
+            android:layout_marginTop="1dp"
+            android:padding="0dp"
+            android:text="sample location"
+            android:textSize="8sp" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:padding="3dp"
-            android:text="sample date" />
+            android:layout_marginTop="1dp"
+            android:padding="0dp"
+            android:text="sample date"
+            android:textSize="8sp" />
 
         <TextView
             android:id="@+id/time"
@@ -44,17 +46,19 @@
             android:layout_height="wrap_content"
             android:layout_alignRight="@id/date"
             android:layout_alignBottom="@id/date"
-            android:layout_marginTop="3dp"
-            android:padding="3dp"
-            android:text="00:00" />
+            android:layout_marginTop="1dp"
+            android:padding="0dp"
+            android:text="00:00"
+            android:textSize="8sp" />
 
         <TextView
             android:id="@+id/category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:padding="3dp"
-            android:text="sample category" />
+            android:layout_marginTop="1dp"
+            android:padding="0dp"
+            android:text="sample category"
+            android:textSize="8sp" />
 
         <TextView
             android:id="@+id/cost"
@@ -62,8 +66,9 @@
             android:layout_height="wrap_content"
             android:layout_alignRight="@id/eventName"
             android:layout_alignBottom="@id/eventName"
-            android:padding="3dp"
-            android:text="$cost" />
+            android:padding="0dp"
+            android:text="$cost"
+            android:textSize="8sp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

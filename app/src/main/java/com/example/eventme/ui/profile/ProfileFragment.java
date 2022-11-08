@@ -50,6 +50,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
@@ -187,17 +188,7 @@ public class ProfileFragment extends Fragment {
                                              }
 
                                              //always sort by cost
-                                            Collections.sort(events, (o1, o2) -> {
-                                                double num = (o2.getCost() - o1.getCost());
-                                                if (num < 0) {
-                                                    num = 1;
-                                                } else if (num > 0) {
-                                                    num = -1;
-                                                } else {
-                                                    num = 0;
-                                                }
-                                                return (int) num;
-                                            });
+                                            Collections.sort(events, Comparator.comparing(Event::getDate));
 
                                             adapter.notifyDataSetChanged();
                                         }
@@ -259,6 +250,7 @@ public class ProfileFragment extends Fragment {
             uploadPhotoButton.setVisibility(View.GONE);
             signOut.setVisibility(View.GONE);
             recyclerView.setVisibility(View.GONE);
+            root.findViewById(R.id.upcoming).setVisibility(View.GONE);
 
             //LOGIN BUTTON ONCLICK
             loginButton.setOnClickListener(new View.OnClickListener() {

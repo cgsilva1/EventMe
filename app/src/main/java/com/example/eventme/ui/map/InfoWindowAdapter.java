@@ -10,8 +10,10 @@ import com.example.eventme.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.ArrayList;
+
 public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
-    private final Event event;
+    private ArrayList<Event> events;
 //
 //    @Override
 //    public View getInfoContents(Marker marker) {
@@ -20,9 +22,9 @@ public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
 
     private Context context;
 
-    public InfoWindowAdapter(Context context, Event event) {
+    public InfoWindowAdapter(Context context, ArrayList<Event> events) {
         this.context = context.getApplicationContext();
-        this.event = event;
+        this.events = events;
     }
 
     @Override
@@ -36,7 +38,17 @@ public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v =  inflater.inflate(R.layout.info_window, null);
 
+        if(marker.getTitle().equals("Current Location")) return null;
+
         //View view = context.getLayoutInflater().inflate(R.layout.info_window, null);
+        Event currEvent = null;
+
+        for(Event event: events) {
+           if(marker.getTitle().equals(event.getName())){
+               currEvent = event;
+           }
+        }
+
 
         TextView name = (TextView) v.findViewById(R.id.eventName);
         TextView loc = (TextView) v.findViewById(R.id.address);
@@ -44,13 +56,15 @@ public class InfoWindowAdapter implements GoogleMap.InfoWindowAdapter{
         TextView time = (TextView) v.findViewById(R.id.time);
         TextView cat = (TextView) v.findViewById(R.id.category);
         TextView cost = (TextView) v.findViewById(R.id.cost);
+    if(currEvent!=null) {
+        name.setText(currEvent.getName());
+        loc.setText(currEvent.getLocation());
+        date.setText(currEvent.getDate());
+        time.setText(currEvent.getTime());
+        cat.setText(currEvent.getCategory());
+        cost.setText("$" + currEvent.getCost() + "0");
+    }
 
-        name.setText(event.getName());
-        loc.setText(event.getLocation());
-        date.setText(event.getDate());
-        time.setText(event.getTime());
-        cat.setText(event.getCategory());
-        cost.setText("$" + event.getCost());
         return v;
     }
 }
