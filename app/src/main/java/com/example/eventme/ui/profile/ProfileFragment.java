@@ -49,6 +49,7 @@ import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
@@ -184,6 +185,20 @@ public class ProfileFragment extends Fragment {
                                                      events.add(event);
                                                  }
                                              }
+
+                                             //always sort by cost
+                                            Collections.sort(events, (o1, o2) -> {
+                                                double num = (o2.getCost() - o1.getCost());
+                                                if (num < 0) {
+                                                    num = 1;
+                                                } else if (num > 0) {
+                                                    num = -1;
+                                                } else {
+                                                    num = 0;
+                                                }
+                                                return (int) num;
+                                            });
+
                                             adapter.notifyDataSetChanged();
                                         }
                                     });
