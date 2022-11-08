@@ -28,6 +28,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -48,26 +49,24 @@ public class MapFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_map, container, false);
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         // Initialize map fragment
-        SupportMapFragment mapFragment =(SupportMapFragment)
+        SupportMapFragment mapFragment = (SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.mapAPI);
         // Async map
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                //Toast.makeText(MapFragment.this, "marker in sydney", Toast.LENGTH_SHORT).show();
 
                 LatLng usc = new LatLng(34.02241412645936, -118.28525647720889);
                 googleMap.addMarker(new MarkerOptions()
                         .position(usc)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                         .title("Current Location"));
-                //googleMap.moveCamera(CameraUpdateFactory.newLatLng(usc));
-                //googleMap.animateCamera( CameraUpdateFactory.zoomTo( 11.0f ) );
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usc,11));
 
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usc, 10));
+                //googleMap.setOnInfoWindowClickListener(this);
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 events = new ArrayList<Event>();
                 adapter = new ExploreAdapter(getContext(), events);
@@ -76,44 +75,29 @@ public class MapFragment extends Fragment {
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
                             @Override
                             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                                if(error!=null){
+                                if (error != null) {
                                     Log.e("Firestore error ", error.getMessage());
                                 }
-                                for(DocumentChange dc: value.getDocumentChanges()){
-                                    if(dc.getType()==DocumentChange.Type.ADDED){
+                                for (DocumentChange dc : value.getDocumentChanges()) {
+                                    if (dc.getType() == DocumentChange.Type.ADDED) {
                                         Event event = dc.getDocument().toObject(Event.class);
 
                                         LatLng eventLoc = new LatLng(event.getLatitude(), event.getLongitude());
                                         googleMap.addMarker(new MarkerOptions()
                                                 .position(eventLoc)
                                                 .title(event.getName()));
-
-
+                                        // Setting a custom info window adapter for the google map
+                                        InfoWindowAdapter markerInfoWindowAdapter = new InfoWindowAdapter(getContext(), event);
+                                        googleMap.setInfoWindowAdapter(markerInfoWindowAdapter);
                                     }
                                 }
                                 adapter.notifyDataSetChanged();
                             }
                         });
+            }
 
-                // When map is loaded
-                //googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                    //@Override
-                    //public void onMapClick(LatLng latLng) {
-                        // When clicked on map
-                        // Initialize marker options
-                        //MarkerOptions markerOptions=new MarkerOptions();
-                        // Set position of marker
-                        //markerOptions.position(latLng);
-                        // Set title of marker
-                        //markerOptions.title(latLng.latitude+" : "+latLng.longitude);
-                        // Remove all marker
-                        //googleMap.clear();
-                        // Animating to zoom the marker
-                        //googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
-                        // Add marker on map
-                        //googleMap.addMarker(markerOptions);
-                    }
-                });
+
+        });
 
 
         // Return view
