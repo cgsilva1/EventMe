@@ -46,6 +46,7 @@ import org.checkerframework.checker.units.qual.C;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 
 public class MapFragment extends Fragment {
 
@@ -53,6 +54,7 @@ public class MapFragment extends Fragment {
     //Location currentLocation;
     //FusedLocationProviderClient fusedLocationProviderClient;
     ArrayList<Event> events;
+    ArrayList<Event> shown_events;
     ExploreAdapter adapter;
 
     //for recycler view of registered events events
@@ -91,7 +93,8 @@ public class MapFragment extends Fragment {
 
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 events = new ArrayList<Event>();
-                adapter = new ExploreAdapter(getContext(), events);
+                shown_events = new ArrayList<>();
+                adapter = new ExploreAdapter(getContext(), shown_events);
 
                 db.collection("Events").orderBy("cost", Query.Direction.ASCENDING)
                         .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -109,11 +112,26 @@ public class MapFragment extends Fragment {
                                                 .position(eventLoc)
                                                 .title(event.getName());
 
+                                        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                                            @Override
+                                            public boolean onMarkerClick(Marker marker) {
+                                                resetList();
+                                                clickedEvent(marker.getTitle());
+                                                adapter.notifyDataSetChanged();
+                                                return false;
+                                            }
+                                        });
+                                        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                                            @Override
+                                            public void onMapClick(LatLng latLng) {
+                                                resetList();
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        });
+
                                         googleMap.addMarker(marker);
 
-
-
-
+                                        shown_events.add(event);
                                         events.add(event);
 
                                     }
@@ -152,6 +170,7 @@ public class MapFragment extends Fragment {
 
 
 
+
                 // When map is loaded
                 //googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 //@Override
@@ -187,6 +206,49 @@ public class MapFragment extends Fragment {
 
         //final TextView textView = binding.textMap;
         //mapViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+    }
+
+    private void clickedEvent(String str) {
+        if (shown_events != null) {
+            for (Iterator<Event> iterator = shown_events.iterator(); iterator.hasNext(); ) {
+                Event event = iterator.next();
+                if (!event.getName().equals(str)) { //description matches what was entered
+                    iterator.remove();
+                }
+            }
+        }
+
+    }
+
+    private void resetList() {
+        for (Iterator<Event> iterator = events.iterator(); iterator.hasNext(); ) {
+            Event event = iterator.next();
+            if (!shown_events.contains(event)) { //description matches what was entered
+                shown_events.add(event);
+            }
+        }
+        Collections.sort(shown_events, (E1, E2) -> {
+            double currLat = 34.02241412645936;
+            double currLong = -118.28525647720889;
+            double E1Lat = E1.getLatitude();
+            double E1Long = E1.getLongitude();
+            double E2Lat = E2.getLatitude();
+            double E2Long = E2.getLongitude();
+            double distanceE1 = Math.sqrt((currLat - E1Lat) * (currLat - E1Lat) + (currLong - E1Long) * (currLong - E1Long));
+            double distanceE2 = Math.sqrt((currLat - E2Lat) * (currLat - E2Lat) + (currLong - E2Long) * (currLong - E2Long));
+
+            double num = (distanceE2 - distanceE1);
+
+            if (num < 0) {
+                num = 1;
+            } else if (num > 0) {
+                num = -1;
+            } else {
+                num = 0;
+            }
+            return (int) num;
+        });
+
     }
 
     @Override
