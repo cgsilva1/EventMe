@@ -89,6 +89,8 @@ public class MapFragment extends Fragment {
                 //googleMap.animateCamera( CameraUpdateFactory.zoomTo( 11.0f ) );
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usc,11));
 
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(usc, 10));
+                //googleMap.setOnInfoWindowClickListener(this);
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 events = new ArrayList<Event>();
                 adapter = new ExploreAdapter(getContext(), events);

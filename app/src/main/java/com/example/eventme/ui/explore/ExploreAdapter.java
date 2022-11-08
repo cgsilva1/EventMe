@@ -36,6 +36,8 @@ import java.util.Objects;
 
 import javax.xml.transform.Source;
 
+import kotlinx.coroutines.scheduling.Task;
+
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
     private Context context;
     SearchView searchView;
@@ -74,6 +76,7 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
 
                         //TODO: make sure you can't register for multiple of the same event
                         //TODO: check times to?
+
                         dRef.update("Reservations", FieldValue.arrayUnion(eventName.getText()));
                         Toast.makeText(context, "Successfully Registered for "+eventName.getText(), Toast.LENGTH_SHORT).show();
 
