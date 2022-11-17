@@ -1,5 +1,7 @@
 package com.example.eventme;
 
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,4 +94,5 @@ public class User {
                 "name='" + name + '\'' +
                 '}';
     }
+
 }
