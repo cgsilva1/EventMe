@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                 uPassword.setError("Password is required");
                 return;
             }
-            int valid=checkFields(email,password);
+            int valid=checkLoginInfo(email,password);
             if(valid!=0){
                 if(valid==1){
                     uEmail.setError("Please enter a valid email");
@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         });
         return success.get();
     }
-    public static int checkFields(String email, String password){
+    public static int checkLoginInfo(String email, String password){
         // validate the data in email and password - check for empty fields and such
         if (TextUtils.isEmpty(email)) {
             return 1;

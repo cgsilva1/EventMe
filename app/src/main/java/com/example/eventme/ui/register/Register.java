@@ -111,41 +111,57 @@ public class Register extends AppCompatActivity {
                 String password = passwordR.getText().toString().trim();
                 String confirmPassword = confirmPasswordR.getText().toString().trim();
 
+                int valid = checkReginfo(name, email, dob, password);
                 //check whether name is empty or not
-                if (TextUtils.isEmpty(name)) {
-                    nameR.setError("Name is required");
-                    return;
+                if(valid!=0){
+                    if (valid == 1) {
+                        nameR.setError("Name is required");
+                        return;
+                    }
+
+                    //check whether email address is empty or not
+                    if (valid == 2) {
+                        emailR.setError("Email Address is required");
+                        return;
+                    }
+
+                    //check whether dob is empty or not
+                    if (valid == 3) {
+                        dobR.setError("Birthdate is required");
+                        return;
+                    }
+
+                    //password required
+                    if (valid == 4) {
+                        dobR.setError("Password is required");
+                        return;
+                    }
+
+                    //check password is >6
+                    if (valid == 5) {
+                        emailR.setError("Password needs to be >6 characters");
+                        return;
+                    }
+
+                    //name not valid
+                    if (valid == 6) {
+                        emailR.setError("Name is invalid");
+                        return;
+                    }
+
+                    //check email address pattern is correct or not
+                    if (valid == 7) {
+                        emailR.setError("Email Address is invalid");
+                        return;
+                    }
+
+                    //check whether password and confirm password are match or not
+                    if (!password.equals(confirmPassword)) {
+                        confirmPasswordR.setError("Password does not match");
+                        return;
+                    }
                 }
 
-                //check whether email address is empty or not
-                if (TextUtils.isEmpty(email)) {
-                    emailR.setError("Email Address is required");
-                    return;
-                }
-
-                //check email address pattern is correct or not
-                if (!email.matches(emailPattern)) {
-                    emailR.setError("Email Address is invalid");
-                    return;
-                }
-
-                //check whether dob address is empty or not
-                if (TextUtils.isEmpty(dob)) {
-                    dobR.setError("Birthdate is required");
-                    return;
-                }
-
-                //check whether password is less than 5 characters?
-                if (password.length() < 5) {
-                    passwordR.setError("Password must be >= 5 characters");
-                    return;
-                }
-
-                //check whether password and confirm password are match or not
-                if (!password.equals(confirmPassword)) {
-                    confirmPasswordR.setError("Password does not match");
-                    return;
-                }
 
                 //register user in firebase
                 mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -233,63 +249,35 @@ public class Register extends AppCompatActivity {
         finish();
     }
 
+    public static int checkReginfo(String name, String email, String dob, String password){
+        // validate the data in email and password - check for empty fields and such
+        if(TextUtils.isEmpty(name))
+        {
+            return 1;
+        }
+        if(TextUtils.isEmpty(email))
+        {
+            return 2;
+        }
+        if(TextUtils.isEmpty(dob))
+        {
+            return 3;
+        }
+        if(TextUtils.isEmpty(password))
+        {
+            return 4;
+        }
+        if(password.length() < 6)
+        {
+            return 5;
+        }
+        if(!name.contains(" ")){
+            return 6;
+        }
+        if(!email.contains("@")){
+            return 7;
+        }
+        return 0;
+    }
+
 }
-//
-//    //CLICK REGISTER BUTTON
-//    public void submitRegister(){
-//        //add data to data base
-//        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-//        DatabaseReference databaseReference = firebaseDatabase.getReference();//databasereference
-//
-//        String uid = currentUser.getUid();
-//        DatabaseReference userRef = databaseReference.child("Events");//Create child node reference
-//        userRef.child(uid).setValue(user);//Insert value to child node
-//    }
-
-//    public void signOut(){
-//        FirebaseAuth.getInstance().signOut();
-//    }
-
-
-//    private void addDataToFirebase(String name, String email, String dob, String password) {
-//        // set data in our object class.
-//        userInfo.setName(name);
-//        userInfo.setEmail(email);
-//        userInfo.setBirthday(dob);
-//        userInfo.setPasswordHash(password);
-//        databaseReference.push().setValue(new User(name, email, dob, password));
-//
-//        // we are use add value event listener method
-//        // which is called with database reference.
-//
-////        ValueEventListener userListener = new ValueEventListener() {
-////            @Override
-////            public void onDataChange(@NonNull DataSnapshot snapshot) {
-////                // inside the method of on Data change we are setting
-////                // our object class to our database reference.
-////                // database reference will sends data to firebase.
-////
-////                //TESTING READING
-////                //String value = snapshot.getValue(String.class);
-////                //Log.d("TAG", "Value is:" + value);
-////
-////                databaseReference.setValue(userInfo);
-////                //databaseReference.child("users").child(userInfo.getEmail()).setValue(userInfo);
-////                //usersRef.child(userInfo.getEmail()).setValue(userInfo);
-////                //databaseReference.child("users").child(userInfo.getEmail()).setValue(userInfo);
-////                //usersRef.child("gracehop").setValue(new User("December 9, 1906", "Grace Hopper"));
-////                // after adding this data we are showing toast message.
-////                Toast.makeText(Register.this, "data added", Toast.LENGTH_SHORT).show();
-////            }
-////
-////            @Override
-////            public void onCancelled(@NonNull DatabaseError error) {
-////                // if the data is not added or it is cancelled then
-////                // we are displaying a failure toast message.
-////                Toast.makeText(Register.this, "Fail to add data " + error, Toast.LENGTH_SHORT).show();
-////            }
-////        };
-////        databaseReference.addValueEventListener(userListener);
-//
-//
-//    }
