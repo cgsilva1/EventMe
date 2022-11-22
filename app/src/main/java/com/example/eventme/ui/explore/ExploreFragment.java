@@ -73,6 +73,11 @@ public class ExploreFragment extends Fragment {
     Spinner dropdown;
 
     FirebaseDatabase firebaseDatabase;
+
+    public ArrayList<Event> getShown_events() {
+        return shown_events;
+    }
+
     //DatabaseReference dbRef = firebaseDatabase.getReference("Event");
     ArrayList<Event> shown_events;
     ArrayList<Event> events;
@@ -206,7 +211,7 @@ public class ExploreFragment extends Fragment {
         return root;
     }
 
-    private void search(String str) {
+    public void search(String str) {
         if (shown_events != null) {
             for (Iterator<Event> iterator = shown_events.iterator(); iterator.hasNext(); ) {
                 Event event = iterator.next();
@@ -219,7 +224,7 @@ public class ExploreFragment extends Fragment {
 
     }
 
-    private void resetList() {
+    public void resetList() {
         for (Iterator<Event> iterator = events.iterator(); iterator.hasNext(); ) {
             Event event = iterator.next();
             if (!shown_events.contains(event)) { //description matches what was entered
@@ -229,7 +234,7 @@ public class ExploreFragment extends Fragment {
 
     }
 
-    private void sortBy(String sorter) {
+    public void sortBy(String sorter) {
 
         if (sorter.equals("cost")) {
             Collections.sort(shown_events, (o1, o2) -> {
@@ -274,6 +279,17 @@ public class ExploreFragment extends Fragment {
             Collections.sort(shown_events, Comparator.comparing(Event::getName));
         }
 
+
+    }
+
+    public void buildTestEventList(ArrayList<Event> evs){
+        shown_events = new ArrayList<>();
+        events = new ArrayList<>();
+        sort_by = "cost";
+        for(Event e: evs) {
+            shown_events.add(e);
+            events.add(e);
+        }
 
     }
 
