@@ -1,9 +1,8 @@
 package com.example.eventme;
 
 
-
-
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -18,17 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
-//import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
-
 
 import com.example.eventme.ui.login.LoginActivity;
+import com.example.eventme.ui.register.Register;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -40,45 +36,58 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4ClassRunner.class)
-public class LoginTest {
+public class RegisterTest {
 
     @Rule
-    public ActivityScenarioRule<LoginActivity> mActivityTestRule = new ActivityScenarioRule<>(LoginActivity.class);
+    public ActivityScenarioRule<Register> mActivityTestRule = new ActivityScenarioRule<>(Register.class);
 
     @Test
-    public void LoginTest() {
+    public void RegisterTest() {
 
         //testing button
-        ViewInteraction button = onView( allOf(withId(R.id.login), withText("Sign in"), withParent(allOf(withId(R.id.container), withParent(withId(android.R.id.content)))), isDisplayed()));
-        button.check(matches(isDisplayed()));
-
-        //testing username
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.username),
-                        childAtPosition(
-                                allOf(withId(R.id.container),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                0),
+        ViewInteraction materialButton = onView(
+                Matchers.allOf(ViewMatchers.withId(R.id.registerBtn), withText("Register"),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("test@usc.edu"), closeSoftKeyboard());
+        materialButton.perform(click());
+
+        //testing name
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.nameReg),
+                        isDisplayed()));
+        appCompatEditText.perform(replaceText("test"), closeSoftKeyboard());
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //testing password
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.password),
-                        childAtPosition(
-                                allOf(withId(R.id.container),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                1),
+
+        //testing username
+        ViewInteraction appCompatEditText1 = onView(
+                allOf(withId(R.id.emailReg),
                         isDisplayed()));
-        appCompatEditText2.perform(replaceText("1234567"), closeSoftKeyboard());
+        appCompatEditText1.perform(replaceText("test@usc.edu"), closeSoftKeyboard());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+//
+        //testing dob
+        ViewInteraction appCompatEditText2 = onView(
+                allOf(withId(R.id.dobReg),
+                        isDisplayed()));
+        appCompatEditText2.perform(replaceText("00/00/0000"), closeSoftKeyboard());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //testing password
+        ViewInteraction appCompatEditText3 = onView(
+                allOf(withId(R.id.passwordReg),
+                        isDisplayed()));
+        appCompatEditText3.perform(replaceText("1234567"), closeSoftKeyboard());
 
     }
 
