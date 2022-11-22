@@ -45,7 +45,7 @@ public class SpinnerTest {
         //testing button
         ViewInteraction spinner = onView( allOf(withId(R.id.spinner_categories)));
         spinner.check(matches(isDisplayed()));
-
+        spinner.perform(click());
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
