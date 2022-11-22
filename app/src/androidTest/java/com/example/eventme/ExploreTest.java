@@ -231,6 +231,17 @@ public class ExploreTest {
         assertArrayEquals(shown.toArray(), soonestEvents.toArray());
     }
 
+    @Test
+    public void sortDistance(){
+        exploreFragment.resetList();
+        exploreFragment.sortBy("distance");
+        ArrayList<String> shown = new ArrayList<>();
+        for(Event e: exploreFragment.getShown_events()){
+            shown.add(e.getName());
+        }
+        assertArrayEquals(shown.toArray(), distanceEvents.toArray());
+    }
+
 
 
 
