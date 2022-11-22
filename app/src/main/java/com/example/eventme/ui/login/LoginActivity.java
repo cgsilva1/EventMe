@@ -94,9 +94,9 @@ public class LoginActivity extends AppCompatActivity {
             return 2;
         }
         if(!email.contains("@")){
-
             return 1;
         }
+
         return 0;
     }
 }

@@ -27,6 +27,7 @@ public class registerUnitTest {
         int result=Register.checkReginfo("test test","test@test","00/00/0000","");//password empty
         assertEquals(result,4);
     }
+
     @Test
     public void invalidPassword(){
         int result=Register.checkReginfo("test test","test@test","00/00/0000","1234");//password not long enough
@@ -43,6 +44,7 @@ public class registerUnitTest {
         int result= Register.checkReginfo("test test","testtest","00/00/0000","1234567890"); //email doesnt have @
         assertEquals(result,7);
     }
+
 
     @Test
     public void validInfo(){
