@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.util.EventLog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,49 +11,26 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventme.Details;
+import com.example.eventme.DetailsActivity;
 import com.example.eventme.Event;
-import com.example.eventme.MainActivity;
 import com.example.eventme.R;
 import com.example.eventme.User;
 import com.example.eventme.ui.login.LoginActivity;
-import com.example.eventme.ui.register.Register;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Objects;
-
-import javax.xml.transform.Source;
-
 
 
 public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHolder> {
     private Context context;
+    private Context cont;
     SearchView searchView;
     User user;
     ArrayList<Event> data;
@@ -78,6 +53,17 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
     public ExploreAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View big_view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_holder, viewGroup, false);
         Button btn = big_view.findViewById(R.id.eventRegisterBtn);
+        TextView eventName = big_view.findViewById(R.id.eventName);
+
+        //when clicking on event name sends to details page
+        eventName.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                Toast.makeText(context, "Sending to details page", Toast.LENGTH_SHORT).show();
+                context.startActivity(new Intent(context, DetailsActivity.class));
+            }
+        });
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +76,9 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
                 dRef = FirebaseFirestore.getInstance().collection("User")
                         .document(mAuth.getCurrentUser().getUid());
 
-                TextView eventName = big_view.findViewById(R.id.eventName);
+//                TextView eventName = big_view.findViewById(R.id.eventName);
+
+
                 for(int i = 0; i<data.size(); i++){
                     if(data.get(i).getName()== eventName.getText()){
                         //register the user for this event

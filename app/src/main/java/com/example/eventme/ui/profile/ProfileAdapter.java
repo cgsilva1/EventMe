@@ -7,34 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventme.Details;
 import com.example.eventme.Event;
-import com.example.eventme.MainActivity;
 import com.example.eventme.R;
 import com.example.eventme.User;
 import com.example.eventme.ui.login.LoginActivity;
-import com.example.eventme.ui.register.Register;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Text;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Objects;
-
-import javax.xml.transform.Source;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.MyViewHolder> {
     private Context context;

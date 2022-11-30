@@ -77,6 +77,15 @@
             android:layout_alignRight="@id/eventName"
             android:layout_alignBottom="@id/eventName"/>
 
+<!--        <Button-->
+<!--            android:id="@+id/detailsBtn"-->
+<!--            android:layout_width="80dp"-->
+<!--            android:layout_height="34dp"-->
+<!--            android:text="Details"-->
+<!--            android:textSize="10dp"-->
+<!--            android:layout_marginRight="10dp"-->
+<!--            android:layout_alignTop="@id/address"-->
+<!--            android:layout_alignRight="@id/address"/>-->
 
         <Button
             android:id="@+id/eventRegisterBtn"
