@@ -1,6 +1,7 @@
 package com.example.eventme;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,21 +37,35 @@ public class DetailsActivity extends Activity {
             setContentView(R.layout.activity_details2);
             eventname = findViewById(R.id.eventName);
 
-            d.collection("Events").addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                    if (error != null) {
-                        Log.e("Firestore error", error.getMessage());
-                    }
-                    for(DocumentChange dc : value.getDocumentChanges()){
-                        if(dc.getType() == DocumentChange.Type.ADDED){
-                            Event event = dc.getDocument().toObject(Event.class);
+            Intent intent = getIntent();
+            String Name = intent.getStringExtra("Name");
+            String Location = intent.getStringExtra("Location");
+            String Date = intent.getStringExtra("Date");
+            String Time = intent.getStringExtra("Time");
+            String Category = intent.getStringExtra("Category");
+            String Cost = intent.getStringExtra("Cost");
+            String PeopleRegistered = intent.getStringExtra("People Registered");
+            String Description = intent.getStringExtra("Description");
+            String Sponsor = intent.getStringExtra("Sponsor");
 
-                        }
-                    }
-                }
-            });
-
+            TextView n = findViewById(R.id.eventName);
+            n.setText(Name);
+            TextView s = findViewById(R.id.sponsor);
+            s.setText(Sponsor);
+            TextView l = findViewById(R.id.addy);
+            l.setText(Location);
+            TextView d = findViewById(R.id.date);
+            d.setText(Date);
+            TextView t = findViewById(R.id.time);
+            t.setText(Time);
+            TextView c = findViewById(R.id.cat);
+            c.setText(Category);
+            TextView co = findViewById(R.id.cost);
+            co.setText(Cost);
+            TextView ppl = findViewById(R.id.peopleReg);
+            ppl.setText(PeopleRegistered);
+            TextView de = findViewById(R.id.desc);
+            de.setText(Description);
 
         }
 
