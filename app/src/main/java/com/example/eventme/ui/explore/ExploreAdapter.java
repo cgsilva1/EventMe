@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,8 +61,28 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
             @Override
             public void onClick(View v){
 
-                Toast.makeText(context, "Sending to details page", Toast.LENGTH_SHORT).show();
-                context.startActivity(new Intent(context, DetailsActivity.class));
+
+                Intent intent = new Intent(context, DetailsActivity.class);
+                for(int i = 0; i<data.size(); i++){
+                    if(data.get(i).getName()== eventName.getText()){
+                        intent.putExtra("Name",data.get(i).getName());
+                        intent.putExtra("Location", data.get(i).getLocation());
+                        intent.putExtra("Date", data.get(i).getDate());
+                        intent.putExtra("Time", data.get(i).getTime());
+                        intent.putExtra("Category", data.get(i).getCategory());
+                        String cost = ""+data.get(i).getCost();
+                        intent.putExtra("Cost", cost);
+                        String registered = ""+data.get(i).getPeopleRegistered();
+                        intent.putExtra("People Registered", registered);
+                        intent.putExtra("Description", data.get(i).getDescription());
+                        intent.putExtra("Sponsor", data.get(i).getSponsor());
+                        Toast.makeText(context, data.get(i).getCost()+" "+registered, Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+                //i.putExtra("Event",);
+                context.startActivity(intent);
             }
         });
 
