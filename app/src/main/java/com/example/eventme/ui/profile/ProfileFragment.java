@@ -61,18 +61,17 @@ public class ProfileFragment extends Fragment {
 
     String userID; //id in database
     TextView name_tv;
-    ImageView profileImage;
     TextView dob_tv;
-    Button uploadPhotoButton;
     Button signOut;
     ImageView profilePic;
     ImageView logo;
     Button regBtn;
-    String dbName;
-    String dbDob;
-    String uname;
-    String udob;
-    String userId;
+
+    ImageView profileImage;
+    Button uploadPhotoButton;
+    Uri filePath;
+    final int PICK_IMAGE_REQUEST = 22;
+
 
     //for recycler view of registered events events
     RecyclerView recyclerView;
@@ -83,6 +82,7 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     FirebaseAuth mAuth;
     FirebaseFirestore fStore;
+    FirebaseStorage storage;
     StorageReference storageReference;
     boolean userLoggedIn = false; //user not signed in
 

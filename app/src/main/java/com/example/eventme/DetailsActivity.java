@@ -1,33 +1,40 @@
 package com.example.eventme;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.eventme.ui.login.LoginActivity;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+
 public class DetailsActivity extends Activity {
     TextView eventname;
-    TextView addy;
-    TextView time;
-    TextView cat;
-    TextView sponsor;
-    TextView cost;
-    TextView date;
-    TextView peopleReg;
+    Button regBtn;
     FirebaseFirestore d;
+    DocumentReference dRef;
+    ArrayList<Event> data;
+    Event checkEvent;
+    private Context context;
 
         public void onCreate(Bundle savedInstanceState) {
 
@@ -36,6 +43,8 @@ public class DetailsActivity extends Activity {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_details2);
             eventname = findViewById(R.id.eventName);
+            regBtn = findViewById(R.id.regButton);
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
             Intent intent = getIntent();
             String Name = intent.getStringExtra("Name");
@@ -67,7 +76,37 @@ public class DetailsActivity extends Activity {
             TextView de = findViewById(R.id.desc);
             de.setText(Description);
 
+            //register button
+            regBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if(mAuth.getCurrentUser()==null){
+                        context.startActivity(new Intent(context, LoginActivity.class));
+                        return;
+                    }
+                    dRef = FirebaseFirestore.getInstance().collection("User")
+                            .document(mAuth.getCurrentUser().getUid());
+
+//                TextView eventName = big_view.findViewById(R.id.eventName);
+
+
+
+                    dRef.update("Reservations", FieldValue.arrayUnion(eventname.getText()));
+                   // Toast.makeText(context, "Successfully Registered for " + eventname.getText(), Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
         }
+
+    //@TODO specify item for efficiency purposes
+    public void add(Event rs) {
+        if (this.data.contains(rs)) return;
+        this.data.add(rs);
+    }
+
+
 
 
 }

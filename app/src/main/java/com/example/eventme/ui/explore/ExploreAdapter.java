@@ -61,7 +61,6 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
             @Override
             public void onClick(View v){
 
-
                 Intent intent = new Intent(context, DetailsActivity.class);
                 for(int i = 0; i<data.size(); i++){
                     if(data.get(i).getName()== eventName.getText()){
@@ -76,8 +75,8 @@ public class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.MyViewHo
                         intent.putExtra("People Registered", registered);
                         intent.putExtra("Description", data.get(i).getDescription());
                         intent.putExtra("Sponsor", data.get(i).getSponsor());
-                        Toast.makeText(context, data.get(i).getCost()+" "+registered, Toast.LENGTH_SHORT).show();
-
+                       // Toast.makeText(context, data.get(i).getCost()+" "+registered, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Sending to details ", Toast.LENGTH_SHORT).show();
                     }
                 }
 
