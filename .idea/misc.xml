@@ -19,6 +19,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_location_24.xml" value="0.1965" />
         <entry key="app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.15" />
         <entry key="app/src/main/res/drawable/ic_baseline_lock_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_music_note_24.xml" value="0.1035" />
         <entry key="app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.1965" />
         <entry key="app/src/main/res/drawable/ic_baseline_sports_basketball_24.xml" value="0.1205" />
         <entry key="app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.2355" />
@@ -31,6 +32,7 @@
         <entry key="app/src/main/res/drawable/logo.xml" value="0.109" />
         <entry key="app/src/main/res/drawable/outline_searchbar.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/register_btn.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/roundbtn.xml" value="0.1035" />
         <entry key="app/src/main/res/layout-w1240dp/activity_login.xml" value="0.2248995983935743" />
         <entry key="app/src/main/res/layout-w936dp/activity_login.xml" value="0.22882513661202186" />
         <entry key="app/src/main/res/layout/activity_details.xml" value="0.1621376811594203" />
@@ -40,7 +42,7 @@
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.2346014492753623" />
         <entry key="app/src/main/res/layout/card_holder.xml" value="0.2501556396484375" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.3359375" />
-        <entry key="app/src/main/res/layout/fragment_explore.xml" value="0.1859126422422152" />
+        <entry key="app/src/main/res/layout/fragment_explore.xml" value="0.2601010101010101" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3359375" />
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_map2.xml" value="0.1" />
