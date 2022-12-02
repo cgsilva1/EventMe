@@ -3,6 +3,7 @@ package com.example.eventme;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
 import com.example.eventme.ui.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -93,7 +95,15 @@ public class DetailsActivity extends Activity {
 
 
                     dRef.update("Reservations", FieldValue.arrayUnion(eventname.getText()));
-                   // Toast.makeText(context, "Successfully Registered for " + eventname.getText(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, "Successfully Registered", Toast.LENGTH_SHORT).show();
+                    sendEmail();
+//
+//                    Intent intent = new Intent(Intent.ACTION_SENDTO); // it's not ACTION_SEND
+//                    intent.putExtra(Intent.EXTRA_SUBJECT, "Subject of email");
+//                    intent.putExtra(Intent.EXTRA_TEXT, "Body of email");
+//                    intent.setData(Uri.parse("mailto:")); // or just "mailto:" for blank
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
+//                    startActivity(intent);
 
                 }
             });
@@ -106,7 +116,31 @@ public class DetailsActivity extends Activity {
         this.data.add(rs);
     }
 
+    protected void sendEmail() {
+       // Log.i("Send email", "");
+        String[] TO = {"cgsilva@usc.edu"};
+        String[] CC = {""};
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
 
+        emailIntent.setData(Uri.parse("mailto:")); //to ensure only email apps
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        //emailIntent.putExtra(Intent.EXTRA_CC, CC);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Your subject");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Email message goes here");
+
+        if(emailIntent.resolveActivity(getPackageManager()) != null){
+            startActivity(emailIntent);
+        }
+
+       //try {
+//            startActivity(new Intent(emailIntent));
+//            finish();
+//            Log.i("Finished sending email...", "");
+////        } catch (android.content.ActivityNotFoundException ex) {
+//            Toast.makeText(DetailsActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+//        }
+    }
 
 
 }
