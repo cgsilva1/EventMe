@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -56,6 +57,13 @@ public class ExploreFragment extends Fragment {
     private RadioButton radioButton;
     private Button btnDisplay;
 
+    ImageButton noBtn;
+    ImageButton sportsBtn;
+    ImageButton musicBtn;
+    ImageButton foodBtn;
+    ImageButton movieBtn;
+    ImageButton healthBtn;
+
     Spinner dropdown;
 
     FirebaseDatabase firebaseDatabase;
@@ -96,6 +104,13 @@ public class ExploreFragment extends Fragment {
         radioGroup = root.findViewById(R.id.radioGroup);
         sort_by = "cost";
         category_result ="None";
+
+        noBtn = root.findViewById(R.id.noCat);
+        sportsBtn = root.findViewById(R.id.sportsCat);
+        musicBtn = root.findViewById(R.id.musicCat);
+        foodBtn = root.findViewById(R.id.foodCat);
+        movieBtn = root.findViewById(R.id.movieCat);
+        healthBtn = root.findViewById(R.id.healthCat);
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -165,6 +180,75 @@ public class ExploreFragment extends Fragment {
                     searchView.clearFocus();
                 }
                 return true;
+            }
+        });
+
+        //category buttons
+        final String[] category = {""};
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        sportsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "sports";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        musicBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "music";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        foodBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "food";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        movieBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "movie";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        healthBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "health";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
             }
         });
 
