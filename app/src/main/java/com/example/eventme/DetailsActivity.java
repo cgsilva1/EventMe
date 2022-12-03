@@ -3,29 +3,22 @@ package com.example.eventme;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 
 import com.example.eventme.ui.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -96,7 +89,7 @@ public class DetailsActivity extends Activity {
 
                     dRef.update("Reservations", FieldValue.arrayUnion(eventname.getText()));
                     //Toast.makeText(context, "Successfully Registered", Toast.LENGTH_SHORT).show();
-                    sendEmail();
+                    //sendEmail(mAuth, dRef, Name, Date, Time);
 //
 //                    Intent intent = new Intent(Intent.ACTION_SENDTO); // it's not ACTION_SEND
 //                    intent.putExtra(Intent.EXTRA_SUBJECT, "Subject of email");
@@ -116,30 +109,42 @@ public class DetailsActivity extends Activity {
         this.data.add(rs);
     }
 
-    protected void sendEmail() {
-       // Log.i("Send email", "");
-        String[] TO = {"cgsilva@usc.edu"};
-        String[] CC = {""};
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+    protected void sendEmail(FirebaseAuth mAuth, DocumentReference dRef, String eventName, String eventDate, String eventTime) {
 
-        emailIntent.setData(Uri.parse("mailto:")); //to ensure only email apps
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-        //emailIntent.putExtra(Intent.EXTRA_CC, CC);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Your subject");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Email message goes here");
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("User").document(mAuth.getCurrentUser().getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(error!=null){
+                    Log.e("Firestore error ", error.getMessage());
+                }
+                String userName = value.getData().get("name").toString();
+                String email = value.getData().get("email").toString();
+                String sub="EventMe Registration" ;
+                Mail m = new Mail("eventmesuppor1@gmail.com", "ReturnofTheSal123");
+                String msg = "You've successfully registered for " + eventName + " at " + eventTime + " on " + eventDate;
+                String[] toArr = {email};
+                m.setFrom("EventMeSupport@gmail.com");
 
-        if(emailIntent.resolveActivity(getPackageManager()) != null){
-            startActivity(emailIntent);
-        }
+                m.setTo(toArr);
+                m.setSubject(sub);
+                m.setBody(msg);
 
-       //try {
-//            startActivity(new Intent(emailIntent));
-//            finish();
-//            Log.i("Finished sending email...", "");
-////        } catch (android.content.ActivityNotFoundException ex) {
-//            Toast.makeText(DetailsActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
-//        }
+                try{
+
+                    if(m.send()) {
+                        //successful
+                    } else {
+                        //failure
+                    }
+                } catch(Exception e) {
+
+                    Log.e("MailApp", "Could not send email", e);
+                }
+            }
+        });
+
+
     }
 
 

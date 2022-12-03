@@ -160,13 +160,14 @@ public class ProfileFragment extends Fragment {
                     dob_tv.setText(dob);
                     String profPic = value.getData().get("picture").toString();
                     String TAG = "ProfileFragment";
-                    Log.i(TAG, "image URI from DB: " + profPic);
                     if(!profPic.equals("")){
                         Uri profPicUri = Uri.parse(profPic);
                         //Picasso.get().load(profPicUri).into(profilePic);
                         //Log.i(TAG, "imageview: " + profilePic.));
                         profilePic.setImageURI(profPicUri);
                     }
+
+
 //                    final StorageReference profileReference = storageReference.child("users/"+ Objects.requireNonNull(fAuth.getCurrentUser()).getUid()+"/profile.jpg");
 //                    profileReference.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(profileImage));
 
