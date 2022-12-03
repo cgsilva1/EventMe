@@ -8,33 +8,32 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import com.example.eventme.Event;
-import com.example.eventme.MainActivity;
-import com.example.eventme.R;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventme.User;
-import com.example.eventme.databinding.FragmentExploreBinding;
-import com.example.eventme.ui.explore.ExploreAdapter;
-import com.example.eventme.ui.explore.ExploreFragment;
-import com.example.eventme.ui.register.Register;
+import com.example.eventme.Event;
+import com.example.eventme.MainActivity;
+import com.example.eventme.R;
 import com.example.eventme.databinding.FragmentProfileBinding;
 import com.example.eventme.ui.login.LoginActivity;
+import com.example.eventme.ui.register.Register;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -42,7 +41,6 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -51,7 +49,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Objects;
 
 public class ProfileFragment extends Fragment {
     View promptA;
@@ -83,7 +80,11 @@ public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     FirebaseAuth mAuth;
     FirebaseFirestore fStore;
+    FirebaseDatabase firebaseDatabase;
     StorageReference storageReference;
+    DatabaseReference databaseReference;
+    DatabaseReference usersRef;
+    DocumentReference dRef;
     boolean userLoggedIn = false; //user not signed in
 
 
@@ -120,6 +121,11 @@ public class ProfileFragment extends Fragment {
         createAccountButton = root.findViewById(R.id.createAccountButton);
 
         mAuth = FirebaseAuth.getInstance();
+        //get the instance of our Firebase database.
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        //get reference for our database
+        databaseReference = firebaseDatabase.getReference("User");
+        usersRef = databaseReference.child("users");
 
         //RECYCLER VIEW OF REGISTERED EVENTS
         recyclerView = root.findViewById(R.id.rvProfile);
@@ -152,6 +158,18 @@ public class ProfileFragment extends Fragment {
                     name_tv.setText(name);
                     String dob = value.getData().get("birthday").toString();
                     dob_tv.setText(dob);
+                    String profPic = value.getData().get("picture").toString();
+                    String TAG = "ProfileFragment";
+                    Log.i(TAG, "image URI from DB: " + profPic);
+                    if(!profPic.equals("")){
+                        Uri profPicUri = Uri.parse(profPic);
+                        //Picasso.get().load(profPicUri).into(profilePic);
+                        //Log.i(TAG, "imageview: " + profilePic.));
+                        profilePic.setImageURI(profPicUri);
+                    }
+//                    final StorageReference profileReference = storageReference.child("users/"+ Objects.requireNonNull(fAuth.getCurrentUser()).getUid()+"/profile.jpg");
+//                    profileReference.getDownloadUrl().addOnSuccessListener(uri -> Picasso.get().load(uri).into(profileImage));
+
                 }
             });
             Activity activity = getActivity();
@@ -225,15 +243,32 @@ public class ProfileFragment extends Fragment {
 //                dob.setText(udob);
 //                userId=userID;
 //            });
-
+            ActivityResultLauncher<Intent> startActivityForResult_ = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == AppCompatActivity.RESULT_OK) {
+                            Intent data = result.getData();
+                            Uri imageUri = data.getData();
+                            uploadImageToFirebase(imageUri);
+                            Picasso.get().load(imageUri).into(profilePic);
+                            //profilePic.setImageURI(imageUri);
+                            String TAG = "ProfileFragment";
+                            Log.i(TAG, "image URI: " + imageUri.toString());
+                        }
+                    }
+            );
 
             //UPLOAD PHOTO ONCLICK
             uploadPhotoButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sendUploadPicture();
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult_.launch(intent);
+                    //sendUploadPicture();
                 }
             });
+
+
 
             //SIGN OUT ONCLICK
             signOut.setOnClickListener(new View.OnClickListener() {
@@ -299,6 +334,15 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    private void uploadImageToFirebase(Uri imageURI) {
+        String TAG = "ProfileFragment";
+        userID = mAuth.getCurrentUser().getUid();
+        Log.i(TAG, "Uid: " + userID);
+        dRef= fStore.collection("User").document(userID);
+        dRef.update("picture", imageURI.toString());
+
+    }
+
     public void sendSignOut(){
         mAuth.signOut();
         userLoggedIn = true;
@@ -311,4 +355,6 @@ public class ProfileFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
 }

@@ -1,38 +1,32 @@
 package com.example.eventme.ui.register;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.eventme.MainActivity;
 import com.example.eventme.R;
 import com.example.eventme.User;
 import com.example.eventme.ui.explore.ExploreAdapter;
 import com.example.eventme.ui.login.LoginActivity;
-import com.example.eventme.ui.login.LoginViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -181,6 +175,7 @@ public class Register extends AppCompatActivity {
                             user.put("email", email);
                             user.put("birthday", dob);
                             user.put("Reservations", Reservations);
+                            user.put("picture", "");
                             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task1 -> {
                                 Toast.makeText(Register.this, "ENTER!", Toast.LENGTH_SHORT).show();
                                 if (!task1.isSuccessful()) {
