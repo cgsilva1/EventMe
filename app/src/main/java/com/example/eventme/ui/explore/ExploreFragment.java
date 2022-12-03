@@ -1,8 +1,5 @@
 package com.example.eventme.ui.explore;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -23,23 +20,14 @@ import androidx.appcompat.widget.SearchView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.eventme.Details;
 import com.example.eventme.Event;
-import com.example.eventme.MainActivity;
 import com.example.eventme.R;
 import com.example.eventme.databinding.FragmentExploreBinding;
-import com.example.eventme.ui.login.LoginActivity;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 
 
 import com.google.firebase.firestore.DocumentChange;
@@ -55,7 +43,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.concurrent.Semaphore;
 
 public class ExploreFragment extends Fragment {
     DatabaseReference ref;
@@ -69,6 +56,13 @@ public class ExploreFragment extends Fragment {
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private Button btnDisplay;
+
+    ImageButton noBtn;
+    ImageButton sportsBtn;
+    ImageButton musicBtn;
+    ImageButton foodBtn;
+    ImageButton movieBtn;
+    ImageButton healthBtn;
 
     Spinner dropdown;
 
@@ -110,6 +104,13 @@ public class ExploreFragment extends Fragment {
         radioGroup = root.findViewById(R.id.radioGroup);
         sort_by = "cost";
         category_result ="None";
+
+        noBtn = root.findViewById(R.id.noCat);
+        sportsBtn = root.findViewById(R.id.sportsCat);
+        musicBtn = root.findViewById(R.id.musicCat);
+        foodBtn = root.findViewById(R.id.foodCat);
+        movieBtn = root.findViewById(R.id.movieCat);
+        healthBtn = root.findViewById(R.id.healthCat);
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -179,6 +180,75 @@ public class ExploreFragment extends Fragment {
                     searchView.clearFocus();
                 }
                 return true;
+            }
+        });
+
+        //category buttons
+        final String[] category = {""};
+        noBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        sportsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "sports";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        musicBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "music";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        foodBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "food";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        movieBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "movie";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        healthBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                category[0] = "health";
+                category_result = category[0];
+                resetList();
+                if(!category_result.equals("None"))  {search(category_result);}
+                sortBy(sort_by);
+                adapter.notifyDataSetChanged();
             }
         });
 

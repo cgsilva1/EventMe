@@ -77,7 +77,6 @@
             android:layout_alignRight="@id/eventName"
             android:layout_alignBottom="@id/eventName"/>
 
-
         <Button
             android:id="@+id/eventRegisterBtn"
             android:layout_width="wrap_content"
@@ -85,7 +84,8 @@
             android:text="Register"
             android:layout_marginRight="10dp"
             android:layout_alignTop="@id/date"
-            android:layout_alignRight="@id/category"/>
+            android:layout_alignRight="@id/category"
+            />
 
     </RelativeLayout>
 

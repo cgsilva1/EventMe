@@ -31,6 +31,8 @@
         android:iconifiedByDefault="false"
         android:queryHint="@string/search_hint"
         app:defaultQueryHint="@string/search_hint"
+
+
         />
 
     <!--displaying a radio group on below line-->
@@ -111,6 +113,74 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:id="@+id/linearLayout1"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:layout_width="10dp"
+            android:layout_height="5dp" />
+        <ImageButton
+            android:id="@+id/noCat"
+            android:background="@drawable/roundbtn"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_do_not_disturb_alt_24" />
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="5dp" />
+        <ImageButton
+            android:id="@+id/sportsCat"
+            android:layout_width="50dp"
+            android:background="@drawable/roundbtn"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_sports_basketball_24" />
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="5dp" />
+        <ImageButton
+            android:id="@+id/musicCat"
+            android:layout_width="50dp"
+            android:background="@drawable/roundbtn"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_music_note_24"
+            />
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="5dp" />
+        <ImageButton
+            android:id="@+id/foodCat"
+            android:layout_width="50dp"
+            android:background="@drawable/roundbtn"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_fastfood_24"
+            />
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="5dp" />
+        <ImageButton
+            android:id="@+id/movieCat"
+            android:layout_width="50dp"
+            android:background="@drawable/roundbtn"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_local_movies_24"
+            />
+        <TextView
+            android:layout_width="15dp"
+            android:layout_height="5dp" />
+        <ImageButton
+            android:id="@+id/healthCat"
+            android:layout_width="50dp"
+            android:background="@drawable/roundbtn"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_directions_run_24"
+            />
+    </LinearLayout>
+
 
 
     <androidx.recyclerview.widget.RecyclerView
