@@ -25,6 +25,7 @@ import java.util.ArrayList;
 public class DetailsActivity extends Activity {
     TextView eventname;
     Button regBtn;
+    Button backBtn;
     FirebaseFirestore d;
     DocumentReference dRef;
     ArrayList<Event> data;
@@ -39,6 +40,7 @@ public class DetailsActivity extends Activity {
             setContentView(R.layout.activity_details2);
             eventname = findViewById(R.id.eventName);
             regBtn = findViewById(R.id.regButton);
+            backBtn = findViewById(R.id.backButton);
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
             Intent intent = getIntent();
@@ -71,6 +73,7 @@ public class DetailsActivity extends Activity {
             TextView de = findViewById(R.id.desc);
             de.setText(Description);
 
+
             //register button
             regBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -97,6 +100,15 @@ public class DetailsActivity extends Activity {
 //                    intent.setData(Uri.parse("mailto:")); // or just "mailto:" for blank
 //                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // this will make such that when user returns to your app, your app is displayed, instead of the email app.
 //                    startActivity(intent);
+
+                }
+            });
+            //back button
+            backBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    startActivity(new Intent(DetailsActivity.this, MainActivity.class));
 
                 }
             });
